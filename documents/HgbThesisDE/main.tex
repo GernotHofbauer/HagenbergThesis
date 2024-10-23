@@ -10,7 +10,7 @@
 \RequirePackage[utf8]{inputenc} % bei Verw. von lualatex oder xelatex entfernen!
 \RequirePackage{hgbpdfa}        % Erzeugt ein PDF/A-2b-konformes Dokument
 
-\documentclass[master,german,smartquotes]{hgbthesis}
+\documentclass[bachelor,german,smartquotes,apa]{hgbthesis}
 % Zulässige Optionen in [..]: 
 %    Typ der Arbeit: 'diploma', 'master' (default), 'bachelor', 'internship'
 %		 Zusätzlich für ein Thesis-Exposé: 'proposal' (für 'bachelor' und 'master')
@@ -19,24 +19,29 @@
 %    APA Zitierstil: 'apa'
 %%%-----------------------------------------------------------------------------
 
+\usepackage{listings}
+\usepackage{xcolor}
 \graphicspath{{images/}}  % Verzeichnis mit Bildern und Grafiken
 \logofile{logo}           % Logo-Datei: images/logo.pdf (kein Logo: \logofile{})
 \bibliography{references} % Biblatex-Literaturdatei (references.bib)
+\include{acronyms}                          % makeglossaries main in der cmd ausführen
 
 %%%-----------------------------------------------------------------------------
 \begin{document}
 %%%-----------------------------------------------------------------------------
 
+
+
 %%%-----------------------------------------------------------------------------
 % Angaben für die Titelei (Titelseite, Erklärung etc.)
 %%%-----------------------------------------------------------------------------
 
-\title{Partielle Lösungen zur allgemeinen Problematik}
-\author{Alex A.\ Schlaumeier}
-\programname{Universal Computing}
+\title{Virtuelle Threads und strukturierte Nebenläufigkeitssteuerung in Java}
+\author{Gernot Hofbauer}
+\programname{Software Engineering}
 
 %\programtype{Fachhochschul-Bachelorstudiengang} % auswählen/editieren
-\programtype{Fachhochschul-Masterstudiengang}
+\programtype{Fachhochschul-Bachelorstudiengang}
 
 \placeofstudy{Hagenberg}
 \dateofsubmission{2024}{06}{25} % {YYYY}{MM}{DD}
@@ -54,6 +59,7 @@
 \maketitle
 \tableofcontents
 
+\printglossary[type=\acronymtype,title=Akronyme]
 \include{front/vorwort} % Ein Vorwort ist optional
 \include{front/kurzfassung}		
 \include{front/abstract}			
@@ -63,22 +69,24 @@
 %%%-----------------------------------------------------------------------------
 
 \include{chapters/einleitung}
-\include{chapters/abschlussarbeit}
-\include{chapters/latex}
-\include{chapters/abbildungen}
-\include{chapters/mathematik}
-\include{chapters/literatur}
-\include{chapters/drucken}
-\include{chapters/schluss}
+\include{chapters/DasDerzeitigeThreadmodell}
+\include{chapters/projectLoom}
+% \include{chapters/abschlussarbeit}
+% \include{chapters/latex}
+% \include{chapters/abbildungen}
+% \include{chapters/mathematik}
+% \include{chapters/literatur}
+% \include{chapters/drucken}
+% \include{chapters/schluss}
 
 %%%-----------------------------------------------------------------------------
 \appendix                                                               % Anhang 
 %%%-----------------------------------------------------------------------------
 
-\include{back/anhang_a} % Technische Ergänzungen
-\include{back/anhang_b} % Inhalt der CD-ROM/DVD
-\include{back/anhang_c} % Chronologische Liste der Änderungen
-\include{back/anhang_d} % Quelltext dieses Dokuments
+% \include{back/anhang_a} % Technische Ergänzungen
+% \include{back/anhang_b} % Inhalt der CD-ROM/DVD
+% \include{back/anhang_c} % Chronologische Liste der Änderungen
+% \include{back/anhang_d} % Quelltext dieses Dokuments
 
 %%%-----------------------------------------------------------------------------
 \backmatter                          % Schlussteil (Quellenverzeichnis und dgl.)

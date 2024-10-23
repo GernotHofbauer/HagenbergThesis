@@ -1,0 +1,19 @@
+\chapter{Das derzeitige Threadmodell}
+\label{cha:DasDerzeitigeThreadmodell}                       % 5 Seiten
+
+\section{Funktionsweise}                                         
+\label{sec:Funktionsweise}
+
+\section{Probleme}                                         
+\label{sec:Probleme}
+
+\Glspl{ot} bringen viele Probleme mit sich. Eines dar größten ist deren Ressourcenintensität.
+Sie müssen alle Sprachen und alle verschiedene Sprachen und Aufgaben unterstützen. Es ist wichtig dass sie Ausführung eines Prozesses unterbrechen und
+wiederaufnehmen können, 
+was das Speichern des Zustands (z.B. des Stack-Pointers und des Program Counters) erfordert. da das Betriebssystem keine Informationen darüber hat wie
+eine Sprache ihren Stapel verwaltet wird der Speicher großzügig zugeteilt und kann zur Laufzeit weiter wachsen aber nicht dynamisch schrumpfen
+was bei Aufgaben mit einer langen durchgängigen Ausführung zu Problemen führen kann. Da der Betriebssystem-Kernel alle Arten von Threads verwalten muss
+die alle Arten von Aufgaben ausführen können, von Http-Requests bis zu sehr leistungsintensiven Berechnungen, müssen bei der
+Verwaltung der CPU Kompromisse eingegangen werden. Dies führt dazu dass einem Thread CPU-Zeit zugeteilt wird obwohl dieser nur wartet.\cite{ProjectLoom}
+Bisher war jede Instanz von \texttt{java.lang.Thread} in der \gls{jvm} ein \gls{pt}. Diese führen Code auf den darunterliegenden \Glspl{ot} aus und binden diesen
+während ihrer gesamten Lebenszeit an sich. Dadurch ist die Anzahl der gesamt verfügbaren \Glspl{pt} durch die Anzahl der \Glspl{ot} begrenzt. \cite{JEP425}

@@ -15,12 +15,12 @@
 % beleuchtet diese Problematik und stellt konkrete Lösungsvorschläge anhand
 % eines Beispiels dar.
 
-Seit einigen jahren Arbeitet Oracle an Möglichkeiten zur Verbesserung der Skalierbarkeit von Java-Anwendungen im Projekt "Loom".
+Seit einigen Jahren Arbeitet Oracle an Möglichkeiten zur Verbesserung der Skalierbarkeit von Java-Anwendungen im Projekt "Loom".
 Der Hauptansatz dieses Vorhabens ist die Einführung von virtuellen Threads, die von der JVM verwaltet werden. 
 Diese Threads sind leichtgewichtiger als klassische Plattform Threads und können in größerer Anzahl erzeugt werden. 
 In Kombination mit "Continuations" \cite{Continuations}, die es ermöglichen sollen, die Ausführung von Threads zu pausieren und fortzusetzen,
 können so bestimmte Anwendungen mit hoher Nebenläufigkeit zukünftig effizienter gestaltet werden. Diese Bachelorarbeit 
-beleuchtet diese Technologien und stellt die Neuerungen dem bereits bekanntem gegenüber.
+beleuchtet diese Technologien und stellt die Neuerungen dem bereits Bekanntem gegenüber.
 
 
 
@@ -57,20 +57,23 @@ beleuchtet diese Technologien und stellt die Neuerungen dem bereits bekanntem ge
 
 
 Die parallele Ausführung von Code bringt immer Schwierigkeiten mit sich. 
-Eine davon ist die Bindung von Threads im Betriebssystem an die erstellten Threads auch wenn dieser nur wartet. Bei einer hohen Anzahl an Threads kann dies schnell zu einem Problem werden.
-Virtual Threads \cite{oracle21VritualThreads} sollen dieses Problem lösen, indem sie von der JVM verwaltet werden und nicht an Threads im Betriebssystem gebunden sind.
+Eine davon ist die Bindung von Threads im Betriebssystem an die im Code erstellten Threads, auch wenn dieser nur wartet. Bei einer hohen Anzahl an Threads kann dies schnell zu einem Problem werden und 
+schwerwiegende Konsequenzen in Form von Performanceeinbußen und Speicherverbrauch haben.
+Virtual Threads \cite{oracle21VritualThreads} sollen dieses Problem lösen, indem sie zusätzlich von der JVM verwaltet werden und nicht an bestimmte Threads im Betriebssystem gebunden sind.
 Wartet ein Virtual Thread, wird dieser vom OS-Thread gelöst und dieser kann derzeit Code eines anderen Virtual Threads ausführen.
 Dies führt dazu dass bei einer sehr hohen Anzahl an Virtual Threads wesentlich weniger Threads im Betriebssystem erstellt werden müssen und somit die Anwendung vor allem im Server-Clients Bereich
 viel skalierbarer wird.
+
 Diese Technologie ist auch die Grundlage für "Structured Concurrency" \cite{structuredConcurrency}. Diese führt StructuredTaskscopes ein,
 die die Ausführung von asynchronen Aufgaben erleichtern und verbessern sollen.
-Durch die Möglichkeit von den Basisklassen abzuleiten und einzelne Methoden zu überschreiben, können so stark individualiesierte Ausführungsdiesnte entstehen \cite{AsyncStructuredConcurrency}.
+Durch die Möglichkeit von den Basisklassen abzuleiten und einzelne Methoden zu überschreiben, können so stark individualisierte Ausführungsdienste entstehen \cite{AsyncStructuredConcurrency}.
 Damit sollen Entwickler ihren Code in kleinere, unabhängige Aufgaben oder Aufgabengruppen strukturieren können oder eine Verwendung ohne manuelle Erstellung
-und Verwaltung der einzelenen Threads ermöglichen.
+und Verwaltung der einzelnen Threads ermöglichen.
 Die Technologien soll auch die Erstellung von asynchronen Methoden vereinfachen und die Lesbarkeit des Codes verbessern.
 Eine weiters geplante Neuerung sind ScopedValues \cite{JEP481}, die es ermöglichen sollen, unveränderbare Werte in einem bestimmten Scope zu speichern und abzurufen.
-Dies gilt auch für alle Child-threads und auch Verschachtelungen von Scopes sind möglich.
-Ziel dabei ist eine Steigerung der Robustheit und Verständlichkeit des Codes im Vergleich zu dem bereits bekannten ThreadLocal.
+Dies gilt auch für alle Child-threads und auch Verschachtlungen von Scopes sind möglich.
+Ziel dabei ist neben einer Verbesserung der Laufzeiteffizienz, eine Steigerung der Robustheit und Verständlichkeit des Codes im Vergleich zu dem bereits bekannten ThreadLocal.
+
 
 
 
@@ -81,6 +84,8 @@ Ziel dabei ist eine Steigerung der Robustheit und Verständlichkeit des Codes im
 
 Aus diesen Ansätzen ergibt sich die folgende Forschungsfrage für diese
 Bachelorarbeit:
+
+
 %
 % \begin{quote}
 % 	Welche Spielmechaniken müssen auf welche Art und Weise in einem
@@ -120,15 +125,14 @@ Bachelorarbeit:
 Um diese Frage zu beantworten, soll die Bachelorarbeit als eine
 Kombination von Literaturarbeit und praktischer \bzw prototypischer Umsetzung
 realisiert werden.
-
 Zu Beginn sollen die grundlegenden Eigenschaften und Limitierungen des bestehenden 
 Thread-Konzepts untersucht werden um die Motivationen für die Neuerungen zu verstehen. 
-Danach soll ein grober Überblick über Projekt Loom und die damit verbundenen Technologien gegeben werden.
+Ein grober Überblick über Projekt Loom und die damit verbundenen Technologien ist ebenfalls vorgesehen.
 Daraufhin sollen die Technologien im Detail erläutert und mit den bisherigen Technologien 
 verglichen werden wobei der Schwerpunkt auf Virtual Threads liegt.
 Dabei soll auch gezeigt werden wie und in welchen Fällen diese Neuerungen in der Praxis 
 angewendet werden können und welche neuen Möglichkeiten sich dadurch ergeben.
-Es soll auch verdeutlicht werden welche bestehende Probleme der parallelen Ausführung 
+Es ist auch eine Verdeutlichung vorgesehen welche bestehende Probleme der parallelen Ausführung 
 durch die neuen Technologien nicht gelöst werden können.
 Die Benchmarks sollen Laufzeit und Speicherverbrauch unter verschiedenen Umständen beinhalten.
 Aus diesen Ergebnissen sollen Schlüsse in welchen Fällen die neuen Technologien 
@@ -149,8 +153,8 @@ verwendet werden sollten und in welchen nicht.
 % positive Evaluierung erwartet, da es bereits erfolgreiche Konzepte \bzw LPD
 % Games gibt, auf deren Erfahrungen aufgebaut werden kann.
 
-Als konkretes Ergebnis wird eine Sammlung Kleinerer Programme erstellt die die neuen Technologien in Projekt Loom demonstrieren.
+Als konkretes Ergebnis wird eine Sammlung kleinerer Programme erstellt die die neuen Technologien in Projekt Loom demonstrieren.
 Es sollen verschiedene Anwendungsfälle jeweils mit den neuen Technologien und den bisherigen Technologien umgesetzt werden sodass die Unterschiede klar erkennbar sind.
 Zusätzlich werden die neuen Möglichkeiten erforscht und nach möglichen Problemen untersucht.
-Benchmarks mit verschiedenen Rahmenbediengungen sollen die Unterschiede in Laufzeit und Speicherverbrauch möglichst representativ zu zeigen.
+Benchmarks mit verschiedenen Rahmenbedingungen sollen die Unterschiede in Laufzeit und Speicherverbrauch möglichst repräsentativ zu zeigen.
 Die Implementierung eines großen zusammenhängenden Programms ist nicht geplant, da dies wenig zielführend wäre.
