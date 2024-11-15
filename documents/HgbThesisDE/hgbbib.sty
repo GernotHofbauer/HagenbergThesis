@@ -9,6 +9,12 @@
 
 \newcommand{\@bibstyle}{numeric-comp}	%% default bibliography style is 'numeric-comp'
 \DeclareOption{apa}{\renewcommand{\@bibstyle}{apa}}
+\DeclareOption{alpha}{\renewcommand{\@bibstyle}{alpha}}
+\DeclareOption{ieee}{\renewcommand{\@bibstyle}{ieee}}
+\DeclareOption{bath}{\renewcommand{\@bibstyle}{bath}}
+\DeclareOption{chicago}{\renewcommand{\@bibstyle}{chicago}}
+\DeclareOption{authoryear}{\renewcommand{\@bibstyle}{authoryear}}
+\DeclareOption{alphabetic}{\renewcommand{\@bibstyle}{alphabetic}}
 \ProcessOptions\relax
 
 \RequirePackage{xifthen}
