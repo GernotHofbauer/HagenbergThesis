@@ -74,7 +74,7 @@
     erstellt werden. Durch die enge Bindung eines \GLSpl{pt} an seinen \gls{ot} wird der Speicher für den Stack bei der Erstellung des Threads festgelegt.
     Eine dynamische Veränderung der Größe wird nicht unterstützt. Übersteigt die benötigte Größe des Stacks den Vorgaben der \gls{jvm}, wird ein \texttt{StackOverflowError}
     geworfen \cite{jvmSpecification}. Diese initiale Größe kann mit der Option \texttt{-Xss"gewünschte Größe"} für die Ausführung der \gls{jvm} verändert werden wobei 
-    je nach Betriebssystem und \gls{jvm} auch hier Einschränkungen gelten. Da das Betriebssystem nicht weiß wie spezifische Programmiersprachen ihren Stack verwalten, allokiert
+    je nach Betriebssystem und \gls{jvm} auch hier Einschränkungen gelten oder im Konstruktor des Threads mitgegeben werden. Da das Betriebssystem nicht weiß wie spezifische Programmiersprachen ihren Stack verwalten, allokiert
     es den Speicher für den Stack eher großzügig \cite{ProjectLoom}.
     \Glspl{vt} hingegen speichern ihren Stack als \texttt{stack chunk object} im Heap ab. Diese können zur Laufzeit wegen ihrer losen Bindung zu \Glspl{ot},
     dynamisch ihre Größe ändern. 
@@ -103,25 +103,31 @@ public static void main(String[] args) {
     });
     vt.setPriority(Thread.MAX_PRIORITY);
     vt.start();
+    Thread vt1 = Thread.startVirtualThread(() -> {
+        System.out.println("Hello from another virtual thread!");
+    });
     try {
-        vt.join();
+        vt.join(); vt1.join();
     } catch (InterruptedException e) {
         e.printStackTrace();
     }
 }\end{JavaCode}
     \end{program}
-    Anstatt \texttt{new Thread(Runnable task).start();} wird der Ausdruck aus Zeile 3 in Programm 
-    \ref{prog:ErstellungEinesVT} benutzt um einen neuen Thread zu erstellen und zu starten. \texttt{Thread.join()} lässt genauso wie bei \Glspl{pt} den aktuellen Thread 
+    Anstatt \texttt{new Thread(Runnable task).start();} wird der Ausdruck aus Zeile 2 in Programm 
+    \ref{prog:ErstellungEinesVT} benutzt um einen neuen Thread zu erstellen. Dabei kann der \texttt{unstarted} Methode ein \texttt{Runnable} mitgegeben werden um den Thread später mit \texttt{start} zu starten. Alternativ kann auch ohne der 
+    \texttt{unStarted} Methode \texttt{.start(Runnable r)} aufgerufen werden um den Thread sofort zu starten. Sollte ein \gls{vt} sofort gestartet werden, kann auch \texttt{startVirtualThread} wie in Zeile 9 benutzt werden. Diese Methode nimmt ebenfalls ein
+    \texttt{Runnable} als Parameter. \texttt{Thread.join()} lässt genauso wie bei \Glspl{pt} den aktuellen Thread 
     auf die Beendung des Threads warten, für den \texttt{.join()} aufgerufen wurde. Die Nachteile dieser Art der Verwendung sind Codeduplizierung und erhöhter Aufwand
     beim Starten mehrerer Threads, da Eigenschaften wie der Name für jeden Thread individuell angepasst werden müssen. Typische Anwendungsfälle sind schnelle
-    einmalige Aufgaben, die sofort und ohne große Konfiguration ausgeführt werden sollen.
+    einmalige Aufgaben, die sofort und ohne große Konfiguration ausgeführt werden sollen \cite{oracle21Thread}.
     Weiters besteht auch die Möglichkeit einen \texttt{Thread.Builder} zu benutzen, der die Anpassung solcher Eigenschaften wie eine Zeichenkette und fortlaufende Zahl
     als Name selbständig weiterführt.
-    \texttt{.setPriority(int)} verändert aber nur die Priorität des \Glspl{vt} und nicht die des zugrundeliegenden \Glspl{pt}. Dadurch ist die Wirkung des Ausdruckes
-    stark eingeschränkt.
+    Bei \Glspl{pt} verändert \texttt{.setPriority(int)} je nach Betriebsystem und Implementierung der \gls{jvm} die Priorität des Threads im Prozess-Scheduler. Bei \Glspl{vt} ist dieser Methodenaufruf in Java 21 zwar
+    möglich, hat aber keine Auswirkungen da die Priorität auf \texttt{NORM\_PRIORITY} fixiert wurde. Dies könnte sich aber in zukünftigen Versionen ändern \cite{JEP444}.
+
     
     \begin{program} [H]
-        \caption{Example of a virtual threadbuilder in Java}
+        \caption{Beispiel eines \texttt{Thread.Builder.OfVirtual} in Java}
         \label{prog:ErstellungEinesVTBuilders}
     \begin{JavaCode}[language=Java, numbers=left]
 public static void main(String[] args) {
@@ -146,8 +152,11 @@ public static void main(String[] args) {
 }\end{JavaCode}
     \end{program}
 
-    Dabei können Regeln für verschiedene Attribute wie eine Namenskonvention wie in Zeile 3 in Programm \ref{prog:ErstellungEinesVTBuilders}
+    Dabei können Regeln für verschiedene Attribute wie eine Namenskonvention
     in einem Schritt für alle späteren Threads festgelegt werden, was Codeduplizierung entgegenwirkt.
+    Die Methode \texttt{name(String, long)} ermöglicht eine automatisierte fortlaufende Benennung zukünftig erstellten Threads. Wie wie in Zeile 3 in Programm \ref{prog:ErstellungEinesVTBuilders} zu sehen nimmt die Methode einen Präfix in Form einer Zeichenkette und einen Startwert vom primitiven
+    Datentypen \texttt{long}. Der erste durch den Builder erstellte Thread als Namen eine Konkatinierung des Präfixes und des Startwertes. Bei jedem weiteren Thread wird der Startwert um eins inkrementiert. Lässt man den Startwert als Methodenparameter weg, heißen alle Threads gleich 
+    \cite{oracle22Builder}. 
 
     \begin{program} [H]
         \caption{Example of a virtual threadexecutor in Java}
@@ -166,7 +175,9 @@ public static void main(String[] args) {
     \end{program}
 
     Wird eine große Anzahl an \Glspl{vt} benötigt,  ist ein Executor bzw. Threadpool empfehlenswert. Dieser sollte in Kombination mit einem
-    try-with-resources-Block verwendet werden, da dieser beim Verlassen des Blockes implizit geschlossen wird. Der \texttt{.newVirtualThreadPerTaskExecutor()}
+    try-with-resources-Block verwendet werden, da dieser beim Verlassen des Blockes implizit geschlossen wird. Wird dies nämlich nicht gemacht kann es
+    im Falle einer Ausnahme dazu kommen dass ein Thread nicht beendet wird und und weiterhin im Hintergrund Systemressourcen verschwendet.
+    Dabei spricht man von einem \texttt{Thread-Leck}. Der \texttt{.newVirtualThreadPerTaskExecutor()}
     erstellt im Gegensatz zum \texttt{.newFixedThreadPool()} für jede Aufgabe einen neuen \gls{vt}.
     Sollten die Aufgaben einen Wert retournieren muss anstatt \texttt{execute} die Methode \texttt{submit} benutzt werden. Dies retourniert ein \texttt{Future<T>}Objekt 
     \cite{oracle21VritualThreads}.
@@ -221,6 +232,8 @@ public static void main(String[] args) {
     }
 }\end{JavaCode}
     \end{program}
+    Wird der \gls{sts} ohne Typ erstellt können die einzelnen Teilprozesse Objekte verschiedener Typen returnieren. \texttt{new StructuredTaskScope<Integer>()}
+    hätte beispielsweise eine einschränkende Wirkung.
     Es wird stark empfohlen, einen \gls{sts} in Form eines try-with-resources-Blocks zu realisieren, da dieser den Gültigkeitsbereich wieder schließt. In diesem Block
     werden Teilaufgaben mit der Methode \texttt{.fork(Runnable r)} erschaffen. Diese haben den Rückgabewert \texttt{StructuredTaskScope.Subtask<T>}, wobei sie keine
     primitiven Datentypen aufnehmen können. Mit \texttt{.state()} kann überprüft werden, ob die einzelnen Ausführungen erfolgreich waren.
@@ -260,7 +273,8 @@ public static void main(String[] args) {
     \end{program}
     Eine der zwei abgeleiteten verschachtelten Unterklassen ist \texttt{ShutdownOnFailure}. Sie ist mit \texttt{final} markiert und steht damit nicht für weitere
     Vererbung zur Verfügung. Der Hauptunterschied zur Basisklasse besteht darin, dass die Ausführung aller Teilprozesse beendet wird, sobald nur einer davon fehlschlägt.
-    Dies hat zur Folge, dass alle noch nicht beendeten Aufgaben ebenfalls fehlschlagen und deren Ergebnisse nicht abgefragt werden dürfen.
+    Dies hat zur Folge, dass alle noch nicht beendeten Aufgaben ebenfalls fehlschlagen und deren Ergebnisse nicht abgefragt werden dürfen. Dieses Verhalten ist besonders dann
+    erwünscht wenn alle Teilergebnisse essentiell sind und das Fehlschlagen eines einzelnen Teilprozesses somit das Gesamtergebnis unbrauchbar macht. 
 
     \begin{program} [H]
         \caption{Beispiel für ShutdownOnSuccess}
@@ -296,5 +310,143 @@ public static void main(String[] args) {
 
 
     % Zitate!!!!!!!!!!!!!!!!!!!!!!!!!
+
+\subsection{Erstellung eines eigenen \texttt{StructuredTaskScopes}}
+\label{subsec:ErstellungEinesEigenenSts?}
+
+    Nicht immer erfüllen die zwei Subklassen \texttt{ShutdownOnFailure} und \texttt{ShutdownOnSuccess} den individuellen Anforderungen des Anwenders.
+    Es könnte zum Beispiel nur das Kleinste Ergebnis aller erfolgreich abgeschlossenen Aufgaben gewünscht werden oder man möchte alle Ergebnisse mit
+    einem Methodenaufruf erhalten ohne sich die \texttt{Subtask<>}s abspeichern zu müssen.
+    Die Klasse \texttt{StructuredTaskScopes<T>} wurde nicht mit final markiert und lässt somit Ableitungen zu. Die für die Erstellung individueller Implementierungen wichtigen
+    Methoden wurden mit der Sichtbarkeit \texttt{protected} versehen und lassen sich daher nach belieben überschreiben.
+
+
+    \begin{program} [H]
+        \caption{Beispiel für den Aufbau von \texttt{SmallestScope<T>}}
+        \label{prog:BeispielFürSmallestScope}
+    \begin{JavaCode}[language=Java, numbers=left]
+public class SmallestScope<T> extends StructuredTaskScope<T> {
+    private final Collection<T> results = new ConcurrentLinkedDeque<>();
+    private final Collection<Throwable> exceptions = new ConcurrentLinkedDeque<>();
+    private final Comparator<T> comparator;
+
+    public SmallestScope(Comparator<T> comparator) {
+        this.comparator = Objects.requireNonNull(comparator);
+    }
+
+    @Override
+    protected void handleComplete(Subtask<? extends T> subtask) {...}
+
+    public Exception exceptions() {...}
+
+    public T smallest() throws Exception {...}
+
+    @Override
+    public SmallestScope<T> join() throws InterruptedException {
+        super.join();
+        return this;
+    }
+
+    @Override
+    public SmallestScope<T> joinUntil(Instant deadline)
+        throws InterruptedException, TimeoutException{
+            super.joinUntil(deadline);
+            return this;
+    } 
+}\end{JavaCode}
+    \end{program}
+    
+    Ein Beispiel für einen individualisierten \gls{sts} ist \texttt{SmallestScope<T>}. Dieser soll nach Beendung oder Fehlschlag aller Teilprozesse das Kleinste 
+    aller Ergebnisse liefern.
+    Dafür muss zunächst von von \texttt{StructuredTaskScope<T>} abgeleitet werden. Außerdem werden noch zusätzliche Datenkomponenten benötigt wie in den Zeilen 2 bis 4 in
+    \ref{prog:BeispielFürSmallestScope} zu sehen ist. 
+    Um die einzelnen Teilergebnisse für die weitere Verarbeitung zu speichern wird ein Behälter benötigt.
+    Dieser sollte theadsicher sein da mehrere Prozesse darauf zugreifen müssen.
+    Da der Benutzer an den Fehlermeldungen der Subprozesse interessiert sein könnte sollten diese ebenfalls in einem threadsicheren Behälter aufbewahrt werden. 
+    Um das kleinste Ergebnis ermitteln zu können wird zunächst eine Vergleichsmöglichkeit in Form eines \texttt{Comperator<T>}-Objekts benötigt. Dieses wird über den
+    Konstruktor injiziert.
+    Das Überschreiben der Methoden \texttt{join()} und \texttt{joinUntil(Instant deadline)} ist nicht essentiell um die Klasse benutzen zu können sondern ermöglicht
+    lediglich Methodenverkettung zu ermöglichen. Dies ist zwar nicht dringend nötig wird aber stellt für viele ein erwartetes verhalten dar.
+
+    \begin{program} [H]
+        \caption{Überschreiben von \texttt{handleComplete}}
+        \label{prog:ÜberschreibenVonHandleComplete}
+    \begin{JavaCode}[language=Java, numbers=left]
+@Override
+protected void handleComplete(Subtask<? extends T> subtask) {
+    switch (subtask.state()) {
+        case SUCCESS -> results.add(subtask.get());
+        case FAILED, UNAVAILABLE -> {
+            exceptions.add(subtask.exception());
+        }
+    }
+}\end{JavaCode}
+    \end{program}
+    Die Methode \texttt{handleComplete()} wird von jedem Thread bei Beendung seiner Aufgabe aufgerufen, vorausgesetzt der \gls{sts} wurde durch z.B. der Methode 
+    \texttt{shutdown()} noch nicht beendet.
+    Um den gewünschten Effect zu erzielen muss zunächst der Zustand des \texttt{Subtask}s abzufragen. Beim Zustand \texttt{SUCCESS} kann das Ergebnis in den Behälter für Ergebnisse
+    gespeichert werden. Ist der Zustand \texttt{FAILED} oder \texttt{UNAVAILABLE} wird die Fehlermeldung abgefragt und in dem dafür vorgesehenen Behälter platziert.
+
+    \begin{program} [H]
+        \caption{Returnieren des kleinsten Ergebnisses}
+        \label{prog:ReturnierenDesKleinstenErgebnisses}
+    \begin{JavaCode}[language=Java, numbers=left]
+public T smallest() throws Exception {
+return results.stream()
+        .filter(Objects::nonNull)
+        .min(comparator)
+        .orElseThrow(this::exceptions);
+}\end{JavaCode}
+    \end{program}
+    Um das kleinste Ergebnis später ermitteln und abfragen zu können wird einen neue Methode \texttt{smallest()} benötigt die nach \texttt{join()} oder
+    \texttt{joinUntil(instant)} aufgerufen werden kann und das Ergebnis returniert. Dazu wird in dem Behälter mithilfe des Comperators das kleinste Element gesucht
+    und zurückgegeben. Dazu wird Javas Stream-API benutzt wobei Objekte deren Wert \texttt{null} beträgt herausgefiltert werden. Sollte dies aus verschiedenen Gründen nicht möglich sein werden alle gesammelten Fehlermeldungen geworfen. 
+    \begin{program} [H]
+        \caption{Returnieren der Fehlermeldungen}
+        \label{prog:ReturnierenDerFehlermeldungen}
+    \begin{JavaCode}[language=Java, numbers=left]
+public Exception exceptions() {
+    Exception exception = new Exception();
+    this.exceptions.forEach(exception::addSuppressed);
+    return exception;
+}\end{JavaCode}
+    \end{program}
+    Um den Nutzenden zu ermöglichen, die Fehlermeldungen der fehlgeschlagenen Teilprozesse zu erhalten wird \gls{sts} um die Methode \texttt{exceptions()} erweitert.
+    Diese returniert eine neue Fehlermeldung der alle Fehlermeldungen aus dem Behälter aus \ref{prog:BeispielFürSmallestScope} in Zeile 3 angehängt werden.
+
+    \begin{program} [H]
+        \caption{Beispiel für die Verwendung von \texttt{SmallestScope<T>}}
+        \label{prog:VerwendungVonSmallestScope}
+    \begin{JavaCode}[language=Java, numbers=left]
+public static void scopesSmallest() {
+    StructuredTaskScope.Subtask<Integer> result1 = null;
+    Integer result = null;
+
+    try (var scope = new SmallestScope<Integer>(Integer::compareTo)) {                                         
+        result1 = scope.fork(() -> { Thread.sleep(1000); return 4; });
+        scope.fork(() -> { throw new RuntimeException("Task 2 failed"); });
+        scope.fork(() -> { Thread.sleep(2000); return 3; });
+
+        result = scope.join().smallest();
+        if (result1.state() == StructuredTaskScope.Subtask.State.SUCCESS) {
+            System.out.println(STR."result from the 1st Thread: \{result1.get()}");
+        }
+        scope.exceptions().printStackTrace();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    System.out.println(STR."smallest result: \{result}");
+}\end{JavaCode}
+    \end{program}
+    Wie in \ref{prog:BeispielFürSmallestScope} ersichtlich ist kann \texttt{SmallestScope} nun ähnlich wie die anderen \Glspl{sts} benutzt werden. Der Konstruktor benötigt
+    aber einen Komparator, hier \texttt{Integer::compareTo} in Zeile 5, als Parameter. Teilergebnisse der einzelnen Prozesse können ebenfalls wieder abgefragt werden. Diese Abfragen
+    bringen dieselben bereits besprochenen Probleme mit sich. Die einzelnen Teilprozesse müssen 
+    aber auch wie bei \texttt{ShutdownOnSuccess} den gleichen Typen returnieren wie im Generika festgelegt. Da die Methode \texttt{join()} dementsprechend überschrieben
+    wurde, kann die Ergebnisabfrage \texttt{smallest()} an diese gekettet werden. Für Debugging-Zwecke können alle Fehlermeldungen wie in Zeile 14 mit \texttt{exceptions()}
+    erhalten werden. Sollten alle Teilprozesse fehlschlagen werden diese aber ebenfalls geworfen. 
+
+
+
+
 
 
