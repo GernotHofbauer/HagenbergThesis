@@ -1,0 +1,24 @@
+@startuml
+class Thread {
+    - ThreadLocal.ThreadLocalMap threadLocals
+}
+
+class ThreadLocal {
+    - T initialValue()
+    + T get()
+    + void set(T value)
+    + void remove()
+}
+
+class ThreadLocalMap {
+    - Entry[] table
+    - int size
+    - void set(ThreadLocal<?> key, Object value)
+    - Entry getEntry(ThreadLocal<?> key)
+    - void remove(ThreadLocal<?> key)
+}
+
+Thread "1" *-- "1" ThreadLocalMap   : contains
+ThreadLocal "1" -- "*" ThreadLocalMap : managed by
+
+@enduml
