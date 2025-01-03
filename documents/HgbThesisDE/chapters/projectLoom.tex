@@ -27,7 +27,7 @@
     Project Loom ist ein laufendes Projekt und manche Funktionalitäten sind noch als Preview-Funktionalität eingestuft und können in späteren Versionen Änderungen 
     unterzogen werden oder sogar wieder entfernt werden.
 
-    
+
 
 \section{Virtuelle Threads}                                 % 5 Seiten ---------------------------------------------------------------------------------------------------------
 \label{sec:VirtuelleThreads}
@@ -71,7 +71,7 @@ Sie sind leichtgewichtig und bieten eine bessere Skalierbarkeit für nebenläufi
     \end{figure}
 
     Die \gls{jvm} kann auch die initiale Ressourcenzuweisung bei \Glspl{vt} viel präziser durchführen als das Betriebssystem bei \Glspl{ot} die mit jedem neuen \gls{pt}
-    erstellt werden. Durch die enge Bindung eines \GLSpl{pt} an seinen \gls{ot} wird der Speicher für den Stack bei der Erstellung des Threads festgelegt.
+    erstellt werden. Durch die enge Bindung eines \Glspl{pt} an seinen \gls{ot} wird der Speicher für den Stack bei der Erstellung des Threads festgelegt.
     Eine dynamische Veränderung der Größe wird nicht unterstützt. Übersteigt die benötigte Größe des Stacks den Vorgaben der \gls{jvm}, wird ein \texttt{StackOverflowError}
     geworfen \cite{jvmSpecification}. Diese initiale Größe kann mit der Option \texttt{-Xss"gewünschte Größe"} für die Ausführung der \gls{jvm} verändert werden wobei 
     je nach Betriebssystem und \gls{jvm} auch hier Einschränkungen gelten oder im Konstruktor des Threads mitgegeben werden.
@@ -546,7 +546,8 @@ public class ScopedValueExample {
 private static final ScopedValue<String> NAME = ScopedValue.newInstance();
 ScopedValue.runWhere(NAME, "duke", () -> {
     try (var scope = new StructuredTaskScope<String>()) {
-        scope.fork(() -> {System.out.println(STR."Name: \{NAME.get()}");return null;});
+        scope.fork(() -> {System.out.println(STR."Name: \{NAME.get()}");
+        return null;});
     }
     Thread.ofVirtual().start(() -> {
         System.out.println(STR."Name: \{NAME.get()}");
@@ -617,10 +618,5 @@ public static void printHello() {
     \end{program}
     In \ref{prog:ThreadLocal} in Zeile 3 wird der Wert der thread-lokalen Variable gesetzt. In Zeile 4 wird eine Methode aufgerufen die den Wert aus diversen Gründen überschreibt. Die Wertabfrage in Zeile 5
     returniert den zuletzt gesetzten Wert auch wenn dies in einer anderen Methode geschieht. Das Verhalten von \texttt{ScopedValue} kann in \ref{prog:VerwendungVonSV} observiert werden.
-
-
-
-
-
 
 

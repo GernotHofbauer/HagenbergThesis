@@ -1,0 +1,61 @@
+\chapter{Messungen}
+\label{cha:Messungen}
+    In Rahmen dieser Arbeit wurden verschiedene Messungen und Benchmarks der Laufzeit durchgeführt um Vergleiche zwischen den bereits bekannten Technologien und den Neuerungen in Projekt Loom 
+    durchführen zu können. 
+
+\section{Testumgebung}                                         
+\label{sec:Testumgebung}
+
+    Alle getesteten Programmen wurden mittels Java Development Kit (JDK) \emph{Eclipse Temurin 22.0.2} kompiliert und ausgeführt. Als JVM-Optionenen wurde 
+\begin{verbatim}
+--add-exports java.management/sun.management=ALL-UNNAMED 
+--add-exports jdk.management/com.sun.management.internal=ALL-UNNAMED 
+-XX:+UnlockDiagnosticVMOptions -XX:+DebugNonSafepoints\end{verbatim}
+    benutzt.
+    Das System nutzt Windows 11 Professional als Betriebssystem und ist mit einem "AMD Ryzen 7 7700x" Prozessor ausgestattet. Dabei handelt es sich um eine CPU mit x86-64-Anweisungssatz und 8 
+    Kernen mit einer Taktfrequenz zwischen 4,5 und 5,4 GHz. Als Arbeitsspeicher kamen  32 GB DDR5-RAM zum Einsatz die auf 6400MHz takten. Die integrierte Graphikeinheit der CPU wurde der CPU wurde 
+    ,um eine zusätzliche Wärmebelastung zu vermeiden, deaktiviert. 
+    Für die Laufzeitmessungen wurde das "Java Microbenchmark Harness (JMH)" Version 1.37 verwendet. 
+
+
+\section{Laufzeitmessungen bei Threads in verschiedenen Szenarien}                                         
+\label{sec:LaufzeitmessungenbeiThreadsinverschiedenenSzenarien}
+
+    Um die Stärken und Schwächen von \Glspl{vt} im Vergleich zu \Glspl{pt} genauer ermitteln bzw. evaluieren zu können sind Laufzeitmessungen in verschiedenen Szenarien nötig. 
+    Anhand dieser Messungen kann ein Leitfaden für die Auswahl des Threadtypen erstellt werden. 
+    Folgende Szenarien werden Behandelt:
+    \begin{itemize}
+        \item Laufzeitmessungen unter hoher Auslastung
+        \item Laufzeitmessungen bei sehr vielen Threads und blockierenden (wartenden) Aufgaben.
+        \item Laufzeitmessungen bei einer Abhängigkeit zwischen Threads und Verwendung einer geteilten Ressource.
+    \end{itemize}
+
+
+\subsection{Laufzeitmessungen bei Threads unter hoher Auslastung}                                         
+\label{subsec:LaufzeitmessungenbeiThreadsunterhoherAuslastung}
+
+    Ziel des der ersten Laufzeitmessung war es herauszufinden wie sich \Glspl{vt} unter ständiger hoher Auslastung schlagen. Dieser Vergleich nutzt keine der von den Entwicklern genannte 
+    Stärke von \Glspl{vt}.
+    \begin{program} [H]
+        \caption{Benchmark eines \Glspl{vt} unter hoher Auslastung}
+        \label{prog:BenchmarkEinesVTUnterHoherAuslastung}
+    \begin{JavaCode}[language=Java, numbers=left]
+        @State(Scope.Benchmark)
+public class PerformanceVirtual {
+
+    @Param("10000")
+    public int nonsenseIterations;
+
+    @Benchmark
+    @BenchmarkMode(Mode.SampleTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void testMethodeVirtual() throws InterruptedException {
+        Thread.startVirtualThread(() -> {
+            for (int i = 0; i < nonsenseIterations; i++)
+                Utility.executeNonesense();
+        }).join();
+    }
+}\end{JavaCode}
+    \end{program}
+    Dieser Benchmark startet einen \gls{vt} und lässt ihm durchgängige rechenintensive Aufgaben erledigen. Um eine Messung durchführen zu können wartet der Eltern-Thread auf die Beendung der Aufgaben.
+    Als Ergebnis wird die gesamte Dauern der Ausführung geliefert. 

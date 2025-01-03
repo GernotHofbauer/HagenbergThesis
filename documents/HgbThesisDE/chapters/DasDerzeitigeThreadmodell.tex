@@ -1,19 +1,28 @@
 \chapter{Das derzeitige Threadmodell}
-\label{cha:DasDerzeitigeThreadmodell}                       % 5 Seiten
-
+\label{cha:DasDerzeitigeThreadmodell}                   % 5 Seiten
+    Java und die \gls{jvm} stellen mit der Klasse\texttt{Thread} und dem Interface \texttt{Runnable} im Paket \texttt{java.lang} grundlegende Mechanismen zur Thread-Verarbeitung bereit.
+    Mit dem Start der JVM werden automatisch der Haupt-Thread und administrative Threads wie der Garbage Collector gestartet. Jeder Thread kann seinerseits weitere Threads instanziieren \cite{GrundKursBS}.
+    
 \section{Funktionsweise}                                         
 \label{sec:Funktionsweise}
 
+    Bisher war jede jeder Thread in der \gls{jvm} eine Instanz von \texttt{java.lang.Thread} auch \gls{pt} genannt. Diese Klasse stellt einen Wrapper-Klasse um \Glspl{ot} dar und Instanzen dieser Klasse
+    binden den darunterliegenden \gls{ot}  während ihrer gesamten Lebenszeit an sich. Dadurch ist die Anzahl der gesamt verfügbaren \Glspl{pt} durch die Anzahl der \Glspl{ot} begrenzt und die Verwaltung
+    der Ressourcen wie CPU-Rechenzeit unterliegt dem Betriebssystem. \cite{JEP425}
+    \texttt{java.lang.Thread} implementiert das Interface \texttt{Runnable} und lässt Ableitungen zu. Die \gls{jvm} kann bei Verwendung eines \texttt{CachedThreadPool}s Threads die ihre Arbeit bereits 
+    abgeschlossen haben wiederverwenden um eine neue Instanziierung zu vermeiden \cite{Executors}.
+
+    
 \section{Probleme}                                         
 \label{sec:Probleme}
 
-\Glspl{ot} bringen viele Probleme mit sich. Eines der größten ist deren Ressourcenintensität.
-Sie müssen alle verschiedene Sprachen und Aufgaben unterstützen. Es ist wichtig, dass sie die Ausführung eines Prozesses unterbrechen und
-wiederaufnehmen können, 
-was das Speichern des Zustands (z.B. des Stack-Pointers und des Program-Counters) erfordert. Da das Betriebssystem keine Informationen darüber hat, wie
-eine Sprache ihren Stapel verwaltet, wird der Speicher großzügig zugeteilt und kann zur Laufzeit weiter wachsen, aber nicht dynamisch schrumpfen,
-was bei Aufgaben mit einer langen durchgängigen Ausführung zu Problemen führen kann. Da der Betriebssystem-Kernel jegliche Arten von Threads verwalten muss,
-die unterschiedlichste Aufgaben ausführen können, von Http-Requests bis zu leistungsintensiven Berechnungen, müssen bei der
-Verwaltung der CPU Kompromisse eingegangen werden. Dies führt dazu, dass einem Thread CPU-Zeit zugeteilt wird, obwohl dieser nur wartet. \cite{ProjectLoom}
-Bisher war jede Instanz von \texttt{java.lang.Thread} in der \gls{jvm} ein \gls{pt}. Diese führen Code auf den darunterliegenden \Glspl{ot} aus und binden diesen
-während ihrer gesamten Lebenszeit an sich. Dadurch ist die Anzahl der gesamt verfügbaren \Glspl{pt} durch die Anzahl der \Glspl{ot} begrenzt. \cite{JEP425}
+    \Glspl{ot} bringen viele Probleme mit sich. Eines der größten ist deren Ressourcenintensität.
+    Sie müssen alle verschiedene Sprachen und Aufgaben unterstützen. Es ist wichtig, dass sie die Ausführung eines Prozesses unterbrechen und
+    wiederaufnehmen können, 
+    was das Speichern des Zustands (z.B. des Stack-Pointers und des Program-Counters) erfordert. Da das Betriebssystem keine Informationen darüber hat, wie
+    eine Sprache ihren Stapel verwaltet, wird der Speicher großzügig zugeteilt und kann zur Laufzeit weiter wachsen, aber nicht dynamisch schrumpfen,
+    was bei Aufgaben mit einer langen durchgängigen Ausführung zu Problemen führen kann. Da der Betriebssystem-Kernel jegliche Art von Threads verwalten muss,
+    die unterschiedlichste Aufgaben ausführen können, von HTTP-Requests bis zu leistungsintensiven Berechnungen, müssen bei der
+    Verwaltung der CPU Kompromisse eingegangen werden. Dies führt dazu, dass einem Thread CPU-Zeit zugeteilt wird, obwohl dieser nur wartet. \cite{ProjectLoom}
+    
+

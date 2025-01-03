@@ -162,6 +162,22 @@ keepspaces=true,%
 \lstnewenvironment{JavaCode}[1][]
 {\lstset{%
 	language=Java,
+	% added by Gernot
+	basicstyle=\ttfamily\footnotesize,
+  	keywordstyle=\color{blue},
+	stringstyle=\color{red},
+	% commentstyle=\color{green},
+	commentstyle=\color[rgb]{0,0.3,0}, % ein dunkleres Grün
+	identifierstyle=\color{black},
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	stepnumber=1,
+	numbersep=5pt,
+	showstringspaces=false,
+	breaklines=true,
+	frame=single,
+	captionpos=b,
+	% added by Gernot
 	escapeinside={/+}{+/}, % makes "/+" and "+/" available for Latex escapes (labels etc.)
 	#1}}%
 {}
