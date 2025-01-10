@@ -34,13 +34,14 @@
 \subsection{Laufzeitmessungen bei Threads unter hoher Auslastung}                                         
 \label{subsec:LaufzeitmessungenbeiThreadsunterhoherAuslastung}
 
-    Ziel des der ersten Laufzeitmessung war es herauszufinden wie sich \Glspl{vt} unter ständiger hoher Auslastung schlagen. Dieser Vergleich nutzt keine der von den Entwicklern genannte 
-    Stärke von \Glspl{vt}.
+    Ziel des der ersten Laufzeitmessung war es herauszufinden wie sich \Glspl{vt} unter ständiger hoher Auslastung schlagen. Die vom Thread ausgeführte Aufagbe greift aus keine 
+    externen Ressourcen wie z.B. Behälter zu und weist auch keine Abhängigkeiten auf andere Prozesse auf. Die Berechnungen sind daher ohne Unterbrechung durchführbar.
+    Dieser Vergleich sollte dadurch keine der von den Entwicklern erwähnten  Stärken von \Glspl{vt} nutzen.
     \begin{program} [H]
         \caption{Benchmark eines \Glspl{vt} unter hoher Auslastung}
         \label{prog:BenchmarkEinesVTUnterHoherAuslastung}
     \begin{JavaCode}[language=Java, numbers=left]
-        @State(Scope.Benchmark)
+@State(Scope.Benchmark)
 public class PerformanceVirtual {
 
     @Param("10000")
@@ -57,5 +58,53 @@ public class PerformanceVirtual {
     }
 }\end{JavaCode}
     \end{program}
-    Dieser Benchmark startet einen \gls{vt} und lässt ihm durchgängige rechenintensive Aufgaben erledigen. Um eine Messung durchführen zu können wartet der Eltern-Thread auf die Beendung der Aufgaben.
-    Als Ergebnis wird die gesamte Dauern der Ausführung geliefert. 
+    Dieser Benchmark startet einen \gls{vt} und lässt ihm durchgängige rechenintensive Aufgaben erledigen. Um eine Messung durchführen zu können wartet der Eltern-Thread auf
+    die Beendung der Aufgaben. Um den Unterschied in der Laufzeit sichtbarer zu gestalten und die Auswirkungen externener Störungsfaktoren zu minimieren 
+    wird die Berechnung wiederholt Ausgeführt. Die Anzahl der Ausführungen ist in Zeile 4 definiert. Der Methodenaufruf \texttt{executeNonesense()} in Zeile 13 stellt die Berechnung dar.
+    Die Methode wird in \ref{prog:ExecuteNoneSense} näher erklärt. Der Benchmark für die \gls{pt} ist bis auf die Art des Verwendeten Threads ident.
+    Als Ergebnis wird die gesamte Dauer der Ausführung geliefert. 
+
+    Die Methode \texttt{executeNonesense} in \ref{prog:ExecuteNoneSense} errechnet alle Primzahlen zwischen 0 und einer in Zeile 2 definierten Obergrenze. Anschließend wird 
+    auch noch die Anzahl der Primzahlen ermittelt. Das Ergebnis ist komplett irrelevant und wird nach der Berechnung nicht weiterverwendet. Wichtig ist nur dass es sich um
+    eine aufwendige Berechnung handelt.
+
+    \begin{program} [H]
+        \caption{Rechenintensive Prozedur}
+        \label{prog:ExecuteNoneSense}
+    \begin{JavaCode}[language=Java, numbers=left]
+public static void executeNonesense() {
+    int limit = 100000; // Adjust this limit for more or less intensity
+    boolean[] isPrime = new boolean[limit + 1];
+    for (int i = 2; i <= limit; i++) 
+        isPrime[i] = true;
+    for (int factor = 2; factor * factor <= limit; factor++) {
+        if (isPrime[factor]) {
+            for (int j = factor; factor * j <= limit; j++) 
+                isPrime[factor * j] = false;
+        }
+    }
+    int primeCount = 0;
+    for (int i = 2; i <= limit; i++) {
+        if (isPrime[i])
+            primeCount++;
+    }
+}\end{JavaCode}
+    \end{program}
+
+    \emph{\textbf{\textcolor{red}{// TODO: Ergebnis + Erklärung}}}
+
+\subsection{Laufzeitmessungen bei wartenden Auslastung}                                         
+\label{subsec:LaufzeitmessungenbeiwartendenAuslastung}
+
+    Der nächste Benchmark behandelt einen Fall bei dem viele sehr wenig rechenintensive Aufgaben parallel gestartet werden. Die Aufgaben selbst simulieren eine wartenden Prozess wie beispielsweise das
+    Warten auf die Antwort eines Servers. Die einzelnen Threads werden mittels Executor-Services erstellt. Gegenübergestellt werden ein \texttt{VirtualThreadPerTaskExecutor}, ein \texttt{CachedThreadPool}
+    und ein \texttt{ThreadPerTaskExecutor} für \Glspl{pt}. Jeder Thread führt dann ein \texttt{Thread.sleep()} aus und gibt anschließend ein Ergebnis zurück. 
+
+
+    \emph{\textbf{\textcolor{red}{// TODO: Ergebnis + Erklärung}}}
+
+\subsection{Laufzeitmessungen bei Abhängigkeiten zwischen Threads}
+\label{subsec:LaufzeitmessungenbeiAbhängigkeitenzwischenThreads}
+
+    Solch reine Anwendungsfälle wie in den ersten beiden Benchmarks behandelt wurden kommen eher selten vor. Viel häufiger treten Mischfälle auf in denen zwar teils rechenintensive Anweisungen ausgeführt werden
+    aber zusätzlich noch externe Abhängigkeiten eine Blockierung des Prozesses bewirken. Aus diesem Grund wird für einen weiteren Laufzeittest ein Produzenten-Konsumenten Modell herangezogen. 
