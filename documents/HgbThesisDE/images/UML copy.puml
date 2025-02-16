@@ -1,0 +1,28 @@
+@startuml
+class Thread {
+    - ThreadLocal.ThreadLocalMap threadLocals
+    - ThreadLocal.ThreadLocalMap inheritableThreadLocals;
+}
+
+class ThreadLocal {
+    ' - T initialValue()'
+    + T get()
+    + void set(T value)
+    + void remove()
+}
+
+class ThreadLocalMap {
+    - Entry[] table
+    - int size
+    - void set(ThreadLocal<?> key, Object value)
+    - Entry getEntry(ThreadLocal<?> key)
+    - void remove(ThreadLocal<?> key)
+}
+
+class Entry {
+    + Objekt value
+    + Threadlocal key
+}
+
+
+@enduml

@@ -21,6 +21,7 @@
 
 \usepackage{listings}
 \usepackage{xcolor}
+
 \graphicspath{{images/}}  % Verzeichnis mit Bildern und Grafiken
 \logofile{logo}           % Logo-Datei: images/logo.pdf (kein Logo: \logofile{})
 \bibliography{references} % Biblatex-Literaturdatei (references.bib)
@@ -30,7 +31,7 @@
 \begin{document}
 %%%-----------------------------------------------------------------------------
 
-
+\includepdf[pages=-]{Titelblatt.pdf}
 
 %%%-----------------------------------------------------------------------------
 % Angaben für die Titelei (Titelseite, Erklärung etc.)
@@ -47,7 +48,7 @@
 \dateofsubmission{2024}{06}{25} % {YYYY}{MM}{DD}
 
 % \advisor{Dr. Alois B.~Treuer} % optional %
-\advisor{FH-Prof. DI Johann Heinzelreiter}
+% \advisor{FH-Prof. DI Johann Heinzelreiter}
 
 
 %\strictlicense % restriktive Lizenz anstatt Creative Commons (nicht empfohlen!)
@@ -56,13 +57,13 @@
 \frontmatter                                       % Titelei (röm. Seitenzahlen)
 %%%-----------------------------------------------------------------------------
 
-\maketitle
-\tableofcontents
+% \maketitle
 
-\printglossary[type=\acronymtype,title=Akronyme]
-\include{front/vorwort} % Ein Vorwort ist optional
+% \include{front/vorwort} % Ein Vorwort ist optional
 \include{front/kurzfassung}		
 \include{front/abstract}			
+\printglossary[type=\acronymtype,title=Akronyme]
+\tableofcontents
 
 %%%-----------------------------------------------------------------------------
 \mainmatter                             % Hauptteil (ab hier arab. Seitenzahlen)
@@ -72,6 +73,7 @@
 \include{chapters/DasDerzeitigeThreadmodell}
 \include{chapters/projectLoom}
 \include{chapters/messungen}
+\include{chapters/fazit}
 % \include{chapters/abschlussarbeit}
 % \include{chapters/latex}
 % \include{chapters/abbildungen}
@@ -84,7 +86,7 @@
 \appendix                                                               % Anhang 
 %%%-----------------------------------------------------------------------------
 
-% \include{back/anhang_a} % Technische Ergänzungen
+\include{back/anhang_a}
 % \include{back/anhang_b} % Inhalt der CD-ROM/DVD
 % \include{back/anhang_c} % Chronologische Liste der Änderungen
 % \include{back/anhang_d} % Quelltext dieses Dokuments
