@@ -1,3 +1,13 @@
 \chapter{Kurzfassung}
 
-
+    Diese Bachelorarbeit befasst sich mit einigen Neuerungen von \emph{Project Loom} für Java. Eingegangen wird dabei auf \emph{virtuelle Threads}, \emph{StructuredTaskScopes},
+    die auch auf virtuellen Threads basieren
+    und \emph{ScopedValues}.
+    Zu jeder dieser Technologien wird zunächst eine technische Übersicht geboten, bei der darauf eingegangen wird, inwiefern sie sich von den bereits bekannten Technologien unterscheiden.
+    Darauf folgt eine eine Erklärung wie sie in Java verwendet werden können, wobei einige Beispiele gezeigt werden. 
+    Bei \texttt{StructuredTaskScopes} beinhaltet dies auch das Einbinden eigener Logik und Fehlerbehandlung durch Ableitung von der Basisklasse. Bei \texttt{ScopedValues} wird auch auf die Unterschiede zu \texttt{ThreadLocal} eingegangen. 
+    Um eine besseren Vergleich ziehen zu können, wird auch auf die Performance eingegangen. Dazu wurden sechs einfache Benchmarks,
+    welche das Laufzeitverhalten untersuchen, erstellt und durchgeführt. Dabei kam das
+    „Java Microbenchmark Harness (JMH)“ zum Einsatz. Aufgrund Schwierigkeiten
+    beim Messen des Speicherverbrauchs wurde zu diesem Aspekt nur ein Test durchgeführt. Jedes Messergebnis ist mit eine Analyse versehen.
+    Auf Basis der Recherche und der Ergebnisse der Benchmarks wird letzten Endes im Fazit eine Zusammenfassung der Stärken und potentiellen Anwendungsszenarien gegeben.

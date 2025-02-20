@@ -1,19 +1,19 @@
 \chapter{Messungen}
 \label{cha:Messungen}
-    In Rahmen dieser Arbeit wurden verschiedene Messungen und Benchmarks des Laufzeitverhaltens durchgeführt, um Vergleiche zwischen den bereits bekannten Technologien und den Neuerungen in Projekt Loom 
+    Im Rahmen dieser Arbeit wurden verschiedene Messungen und Benchmarks des Laufzeitverhaltens durchgeführt, um Vergleiche zwischen den bereits bekannten Technologien und den Neuerungen in Projekt Loom 
     durchführen zu können. 
 
 \section{Testumgebung}                                         
 \label{sec:Testumgebung}
 
-    Alle getesteten Programmen wurden mittels Java Development Kit (JDK) \emph{Eclipse Temurin 22.0.2} kompiliert und ausgeführt. Als JVM-Optionenen wurde 
+    Alle getesteten Programme wurden mittels Java Development Kit (JDK) \emph{Eclipse Temurin 22.0.2} kompiliert und ausgeführt. Als JVM-Optionen wurden 
 \begin{verbatim}
 --add-exports java.management/sun.management=ALL-UNNAMED 
 --add-exports jdk.management/com.sun.management.internal=ALL-UNNAMED 
 -XX:+UnlockDiagnosticVMOptions -XX:+DebugNonSafepoints\end{verbatim}
     benutzt.
     Das System nutzt Windows 10 Professional als Betriebssystem und ist mit einem "i7-8086K" Prozessor ausgestattet. Dabei handelt es sich um eine CPU mit x86-64-Anweisungssatz und 6 
-    Kernen mit einer Taktfrequenz zwischen 4 und 5 GHz. Als Arbeitsspeicher kamen  16 GB DDR4-RAM zum Einsatz die auf 2600MHz takten. Die integrierte Graphikeinheit der CPU wurde, 
+    Kernen mit einer Taktfrequenz zwischen 4 und 5 GHz. Als Arbeitsspeicher kamen  16 GB DDR4-RAM zum Einsatz, welche auf 2600MHz takten. Die integrierte Graphikeinheit der CPU wurde, 
     um eine zusätzliche Wärmebelastung zu vermeiden, deaktiviert. 
     Für die Laufzeitmessungen wurde das "Java Microbenchmark Harness (JMH)" Version 1.37 verwendet.
     Es wurden keine Maßnahmen ergriffen, um hardwarespezifische Einflussfaktoren wie den Taktraten-Boost der CPU zu unterbinden.
@@ -22,7 +22,7 @@
 \section{Laufzeitmessungen bei Threads in verschiedenen Szenarien}                                         
 \label{sec:LaufzeitmessungenbeiThreadsinverschiedenenSzenarien}
 
-    Um die Stärken und Schwächen von \Glspl{vt} im Vergleich zu \Glspl{pt} genauer ermitteln bzw. evaluieren zu können sind Laufzeitmessungen in verschiedenen Szenarien nötig. 
+    Um die Stärken und Schwächen von \Glspl{vt} im Vergleich zu \Glspl{pt} genauer ermitteln bzw. evaluieren zu können, sind Laufzeitmessungen in verschiedenen Szenarien nötig. 
     Anhand dieser Messungen kann ein Leitfaden für die Wahl zwischen \Glspl{pt} und \Glspl{vt} erstellt werden. 
     Folgende Szenarien werden behandelt:
     \begin{itemize}
@@ -36,7 +36,7 @@
 \label{subsec:LaufzeitmessungenbeiThreadsunterhoherAuslastung}
 
     Ziel der ersten Laufzeitmessung war es herauszufinden wie sich \Glspl{vt} unter ständiger hoher Auslastung schlagen. Die vom Thread ausgeführte Aufgabe greift auf keine 
-    externen Ressourcen zu und weist auch keine Abhängigkeiten auf andere Prozesse auf. Die Berechnungen sind daher ohne Unterbrechung durchführbar.
+    externen Ressourcen zu und weist auch keine Abhängigkeiten von anderen Prozessen auf. Die Berechnungen sind daher ohne Unterbrechung durchführbar.
     Dieser Vergleich nutzt dadurch keine der von den Entwicklern erwähnten  Stärken von \Glspl{vt}.
     \begin{program} [H]
         \caption{Benchmark eines \Glspl{vt} unter hoher Auslastung}
@@ -103,8 +103,8 @@ public static void executeNonesense() {
     Ausführungsdauer zu.
     Das arithmetische Mittel der Ausführungsdauer der \Glspl{vt} beträgt 2240,6391 Millisekunden (ms). 
     \Glspl{pt} benötigten dafür durchschnittlich 2204,6939 ms. Somit beträgt der mittlere Geschwindigkeitsunterschied 1,6 \% zugunsten der \Glspl{pt}.
-    Das Ergebnis ist damit damit begründbar, dass in diesem Fall die von den Entwicklern genannten Verbesserungen der \Glspl{vt} keine Vorteile bieten. Weder die billigere
-    Erstellung neuer Instanzen, da wenige Threads gestartet werden, noch Fähigkeit bei blockierenden Aufgaben vom Carrier-Thread gelöst zu werden, da der keine blockierende Aufgaben auftreten und
+    Das Ergebnis ist damit begründbar, dass in diesem Fall die von den Entwicklern genannten Verbesserungen der \Glspl{vt} keine Vorteile bieten. Weder die billigere
+    Erstellung neuer Instanzen, da wenige Threads gestartet werden, noch die Fähigkeit bei blockierenden Aufgaben vom Carrier-Thread gelöst zu werden, da keine blockierenden Aufgaben auftreten und
     auch keine anderen \Glspl{vt} existieren, die diese Rechenzeit beanspruchen könnten. Nur dürfte ein kleiner Overhead existieren der sie im Vergleich zu \Glspl{pt} verlangsamt, da ein \gls{vt} alle seine
     Berechnungen auf einem \gls{pt} ausführt.
     Diese Unterschiede sollten in den meisten Fällen aber vernachlässigbar sein, da die Einbußen sich gering halten und sich solch reine Situationen wie dieser Benchmark in Praxis eher selten 
@@ -143,7 +143,7 @@ public class VirtualThreadSleep {
     }
 }\end{JavaCode}
     \end{program}
-    In Programm \ref{prog:sleep} in die Implementierung für den \texttt{VirtualThreadPerTaskExecutor} zu sehen. Die Implementierungen der anderen beiden Benchmarks unterscheiden dabei nur beim verwendeten 
+    In Programm \ref{prog:sleep} ist die Implementierung für den \texttt{VirtualThreadPerTaskExecutor} zu sehen. Die Implementierungen der anderen beiden Benchmarks unterscheiden sich dabei nur beim verwendeten 
     Executor. Wichtig ist, bei dieser Laufzeitmessung anzumerken, dass die Anzahl an Aufgaben (Zeilen 4 und  5) höher ist als die Anzahl der vom Betriebssystem direkt bereitgestellten Threads.
     \begin{figure}[H]
         \centering
@@ -158,9 +158,9 @@ public class VirtualThreadSleep {
     Der \texttt{CachedThreadPool} benötigte im Mittel 14588.2087 ms, also über das zehnfache länger als \Glspl{vt}.
     Sogar nochmal deutlich schlechter abgeschnitten hat der \texttt{ThreadPerTaskExecutor} mit einer mittleren Laufzeit von 29152.0905 ms. Somit war dieser nur etwa halb so schnell wie
     der \texttt{CachedThreadPool}. Aufgrund dieses hohen Unterschiedes ist anzunehmen, dass bei den beiden Benchmarks, die ausschließlich \Glspl{pt} nutzen, nicht alle Aufgaben parallel ausgeführt
-    werden konnten. Der \texttt{CachedThreadPool} konnte die Laufzeit reduzieren, indem die Threads, die ihre Aufgaben abgeschlossen haben, wiederverwendet werden. Somit fällt in einigen Situationen 
+    werden konnten. Der \texttt{CachedThreadPool} konnte die Laufzeit reduzieren, indem die Threads, die ihre Aufgaben abgeschlossen haben, wiederverwendet wurden. Somit fällt in einigen Situationen 
     die ressourcenintensive Instanziierung weg. Sollten alle Threads gleichzeitig ausführbar sein, ginge dieser Vorteil verloren. Zusätzlich wurde auch ein \texttt{ForkJoinPool} getestet. 
-    Im Punkt Laufzeit Schnitt dieser nur leicht besser als der \texttt{ThreadPerTaskExecutor} ab. Es ist auch anzumerken, dass 
+    Im Punkt Laufzeit schnitt dieser nur leicht besser als der \texttt{ThreadPerTaskExecutor} ab. Es ist auch anzumerken, dass 
     im Gegensatz zu allen anderen getesteten Thread-Pools beim \texttt{ForkJoinPool} nicht mehr mit dem Gerät interagiert werden konnte. Beim Versuch, im Hintergrund andere Prozesse auszuführen, kamen diese zum 
     Stillstand. 
 
@@ -172,7 +172,7 @@ public class VirtualThreadSleep {
     aber zusätzlich noch externe Abhängigkeiten eine Blockierung des Prozesses bewirken. Aus diesem Grund wird für einen weiteren Laufzeittest ein Produzenten-Konsumenten Modell herangezogen.
     Dabei platzieren eine Menge an Produzenten, die jeweils als ein eigener Thread implementiert sind, Objekte in eine \texttt{ArrayBlockingQueue} mit einer definierten maximalen Kapazität.
     Die Konsumenten entnehmen die Objekte wiederum aus der Warteschlange. Die \texttt{ArrayBlockingQueue} ist Thread-sicher implementiert und verhindert gleichzeitige Zugriffe. Außerdem werden 
-    die Produzenten blockiert, sollte die maximale Kapazität erreicht werden. Dasselbe gilt für die Konsumenten sollte die Warteschlange leer sein. 
+    die Produzenten blockiert, sollte die maximale Kapazität erreicht werden. Dasselbe gilt für die Konsumenten, falls die Warteschlange leer sein sollte. 
     Damit auch rechenintensive Operationen durchgeführt werden, rufen alle Konsumenten und Produzenten beim Ausführen ihrer Arbeitsschritte die Methode \texttt{executeNoneSense}, ersichtlich
     in Programm \ref{prog:ExecuteNoneSense} auf.
 
@@ -241,10 +241,10 @@ public class ScopedValueBenchmarkSingleQuery {
         \label{fig:SingleQuery}
     \end{figure}
 
-    In \ref{fig:SingleQuery} ist zu erkennen dass der Unterschied zwischen den beiden Technologien in diesem Anwendungsfall gering ausfällt. Mit einer durchschnittlichen Ausführungsdauer von
+    In \ref{fig:SingleQuery} ist zu erkennen, dass der Unterschied zwischen den beiden Technologien in diesem Anwendungsfall gering ausfällt. Mit einer durchschnittlichen Ausführungsdauer von
     0,01977 ms war die Implementierung mit \texttt{ThreadLocal} um etwa 1,2 \% schneller als die Alternative. Die Implementierung mit \texttt{ScopedValue} benötigte im Mittel 0,02002 ms.
-    Diese Messungen beinhalten auch die Zeit die benötigt wurde um die Objekte selbst zu erstellen und zu die Wertzuweisungen durchzuführen. Sollte dieser Vorgang bei einer der beiden Technologien 
-    langsamer als bei der anderen erfolgen könnte dies dazu führen dass die Abfrage dafür um einiges schneller erfolgt als vermutet. Eine Berücksichtigung dieser Eigenschaft wäre für den praktischen
+    Diese Messungen beinhalten auch die Zeit, die benötigt wurde, um die Objekte selbst zu erstellen und zu die Wertzuweisungen durchzuführen. Sollte dieser Vorgang bei einer der beiden Technologien 
+    langsamer als bei der anderen erfolgen, könnte dies dazu führen, dass die Abfrage dafür um einiges schneller erfolgt als vermutet. Eine Berücksichtigung dieser Eigenschaft wäre für den praktischen
     Gebrauch wenig zielführend, da eine einzelne Wertabfrage ohne Wertzuweisung nicht durchführbar ist. 
 
 \subsection{Laufzeit bei wiederholten Abfragen}
@@ -263,7 +263,7 @@ public class ScopedValueBenchmarkSingleQuery {
         \label{fig:MultQuery}
     \end{figure}
 
-    Der Fakt dass bei wiederholten Wertabfragen von bereichsgebundenen Variablen der Wert am Thread selbst zwischengespeichert werden sollte, lässt vermuten, dass der Unterschied zu Threadlokal 
+    Der Fakt, dass bei wiederholten Wertabfragen von bereichsgebundenen Variablen der Wert am Thread selbst zwischengespeichert werden sollte, lässt vermuten, dass der Unterschied zu Threadlokal 
     sehr gering ausfallen sollte. Dies ist in diesem Szenario, wie in Abbildung \ref{fig:MultQuery} zu sehen ist, nicht der Fall. Der Test für die Klasse \texttt{ThreadLocal} benötigte
     durchschnittlich 0,045122 ms. Der Test für \texttt{ScopedValue} benötigte mit 0,051074 ms etwa 13 \% mehr Zeit. Berücksichtigt man auch die Ergebnisse aus Kapitel \ref{sec:LaufzeitbeieinzelnenAbfragen}
     ist anzunehmen, dass bei der Klasse \texttt{ScopedValue} die Instanziierung und Wertbindung schneller erfolgt als bei \texttt{ThreadLocal}. Dafür benötigt die Wertabfrage mehr Zeit, auch bei einer 
@@ -271,7 +271,8 @@ public class ScopedValueBenchmarkSingleQuery {
 
 \subsection{Laufzeit bei Thread-übergreifender Vererbung der Variablen}
 \label{sec:LaufzeitbeiVererbung}
-    Die Verhalten von \texttt{InheritableThreadLocal} wurde von den Entwicklern der \Glspl{vt} in Kombination mit einer hohen Anzahl an kurzlebigen Threads als potentiell problematisch 
+
+    Das Verhalten von \texttt{InheritableThreadLocal} wurde von den Entwicklern der \Glspl{vt} in Kombination mit einer hohen Anzahl an kurzlebigen Threads als potentiell problematisch 
     dargestellt. Diese Laufzeitmessung stellt daher den Vererbungsvorgang von \texttt{InheritableTreadLocal} und \texttt{ScopedValue} gegenüber.
 
     \begin{program} [H]
@@ -303,9 +304,10 @@ public class ScopedValuesInheritanceBenchmark {
     \end{program}
     Da die threadübergreifende Vererbung eines bereichsgebundenen Wertes nur stattfindet, wenn der neue Thread durch die \texttt{fork}-Methode eines \gls{sts} erstellt wurde, wird eine Instanz 
     der Basisklasse \texttt{StructuredTaskScope} verwendet. Im neuen Thread selbst wird nicht mehr auf
-    den Wert zugegriffen, da dieser Vorgang in den beiden Situationen unterschiedliche Performanz aufweisen können. Stattdessen wird eine einfache Instruktion mit einer konstanten Ausführungsdauer
+    den Wert zugegriffen, da dieser Vorgang in den beiden Situationen unterschiedliche Performanz aufweisen kann. Stattdessen wird eine einfache Instruktion mit einer konstanten Ausführungsdauer
     durchgeführt. Ein \gls{sts} erwartet bei jeder Teilaufgabe einen retournierten Wert, daher ist das zweite Statement in Zeile 15 nötig. Um eine \texttt{StructureViolationException} zu vermeiden,
-    muss sich der gesamte \gls{sts} im Gültigkeitsbereich einer Wertbindung des \texttt{ScopedValue} befinden, auch die Instanziierung und der \texttt{join()}-Aufruf. Die Vergleichsmessung
+    müssen sich sowohl der gesamte \gls{sts}, als auch die Instanziierung und der \texttt{join()}-Aufruf im Gültigkeitsbereich einer Wertbindung des \texttt{ScopedValue} befinden.
+    Die Vergleichsmessung
     nutzt eine Instanz der Klasse \texttt{InheritableTreadLocal}. In Zeile 12 wird der Wert mittels der \texttt{set()}-Methode festgelegt.
 
     \begin{figure}[H]
@@ -315,18 +317,18 @@ public class ScopedValuesInheritanceBenchmark {
         \label{fig:inheritance}
     \end{figure}
 
-    Der Test für bereichsgebundenen Werte benötigte in diesem Szenario im Durchschnitt 0.02723 ms. Die Ausführung der Version mit \texttt{ThreadLocal} war mit 0.03018 ms um etwa 10 \% langsamer. 
+    Der Test für bereichsgebundene Werte benötigte in diesem Szenario im Durchschnitt 0.02723 ms. Die Ausführung der Version mit \texttt{ThreadLocal} war mit 0.03018 ms um etwa 10 \% langsamer. 
     Bei Threads mit einer sehr kurzen Lebensdauer könnte dieser Geschwindigkeitsunterschied bedenklich sein, wobei vorher abgewogen werden sollte, ob eine Vererbung der Werte überhaupt 
     benötigt wird. Bereichsgebundene Variablen können zwar beschleunigen, doch die Auswahl sollte anhand der benötigten Eigenschaften erfolgen, wie beispielsweise der Veränderbarkeit.
 
 \subsection{Speicherbedarf bei einer hohen Anzahl an Threads}
 \label{sec:Speicherbedarf}
 
-    Interessant ist ebenfalls die Gegenüberstellung der beiden Technologien bei ihrem Speicherbedarf. Dazu wird ein \texttt{byte}-Feld mit 1.048.576 Einträgen erstellt und als Wert für einen
+    Interessant ist ebenfalls die Gegenüberstellung der beiden Technologien im Bezug auf ihren Speicherbedarf. Dazu wird ein \texttt{byte}-Feld mit 1.048.576 Einträgen erstellt und als Wert für einen
     \texttt{ScopedValue} benutzt. Dieser Wert wird dann auf 1000 neue \Glspl{vt} vererbt. Dazu kommt ein \gls{sts} zum Einsatz. Direkt vor und nach dem \gls{sts} wird mittels 
     \texttt{MemoryMXBean} der von der \gls{jvm} verwendete Speicher ermittelt. Nach kurzem Warten und einem Aufruf von \texttt{System.gc()}, um den Garbage-Collector zu aktivieren, wird 
     dieser Vorgang für \texttt{InheritableThreadLocal} wiederholt. Nach 5 Messiterationen konnte festgestellt werden, dass \texttt{InheritableThreadLocal} einen 137-fachen Speicherbedarf 
-    vorweist, obwohl in jedem Thread ein Zugriff auf den Wert durchgeführt wurde, damit das Caching bei \texttt{ScopedValue} durchgeführt werden kann. Dieses Verhalten weist darauf hin, dass
+    vorweist, obwohl in jedem Thread ein Zugriff auf den Wert durchgeführt wurde, damit das Caching bei \texttt{ScopedValue} durchgeführt werden könnte. Dieses Verhalten weist darauf hin, dass
     das Zwischenspeichern des Wertes am Thread-Objekt bei \texttt{ScopedValue} in diesem Fall nur begrenzt oder gar nicht durchgeführt wurde. Auch wenn die Methode zur Ermittlung des Speicherbedarfs 
-    nicht unbedingt präzise ist, stellt sich das Ergebnis als so aussagekräftig heraus um einen Schluss ziehen zu können. Sollten viele Thread benötigt werden und der bereitgestellte Wert 
+    nicht unbedingt präzise ist, stellt sich das Ergebnis als so aussagekräftig heraus um einen Schluss ziehen zu können. Sollten viele Threads benötigt werden und der bereitgestellte Wert 
     nicht in jedem Thread benötigt werden stellt sich \texttt{ScopedValue} als wesentlich speichersparender heraus. Der Quelltext ist im Anhang in Programm \ref{prog:Speicherverbrauch} zu finden.

@@ -2,7 +2,12 @@
 
 
 \begin{english} %switch to English language rules
-This should be a 1-page (maximum) summary of your work in English.
-%und hier geht dann das Abstract weiter...
+    This bachelor's thesis deals with some innovations of \emph{Project Loom} for Java. It examines \emph{virtual threads}, \emph{StructuredTaskScopes} that are also based on virtual threads,
+    and \emph{ScopedValues}. For each of these technologies, a technical overview is first provided, discussing how they differ from the already known technologies. 
+    This is followed by an explanation of how they can be used in Java, with several examples presented. For \texttt{StructuredTaskScopes}, this also includes integrating custom logic and error handling by
+    subclassing the base class. For \texttt{ScopedValues}, the differences compared to \texttt{ThreadLocal} are also addressed. In order to enable a better comparison, performance is also examined. 
+    For this purpose, six simple benchmarks that investigate runtime behavior were created and executed. In doing so, the “Java Microbenchmark Harness (JMH)” was employed. Due to difficulties in measuring 
+    memory consumption, only one test was conducted for this aspect. Each measurement result is accompanied by an analysis. Ultimately, based on the research and the benchmark results, the conclusion provides 
+    a summary of the strengths and potential application scenarios.
 \end{english}
 

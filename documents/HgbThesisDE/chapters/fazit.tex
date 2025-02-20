@@ -1,22 +1,24 @@
 \chapter{Zusammenfassung und Fazit}
 \label{cha:fazit}
-    Projekt Loom stellt einige Neuerungen für Sprache Java vor. Vor allem im Bereich der Nebenläufigkeit wird die Sprache erweitert. Das Herzstück dabei stellen die \Glspl{vt} dar.
-    Dabei handelt es sich um flexible, leichtgewichtige Threads die geringere Kosten bei der Instanziierung vorweisen. Dadurch können sie schneller und in größeren Mengen erstellt werden.
+    Projekt Loom stellt einige Neuerungen für die Sprache Java vor. Vor allem im Bereich der Nebenläufigkeit wird die Sprache erweitert. Das Herzstück dabei stellen die \Glspl{vt} dar.
+    Dabei handelt es sich um flexible, leichtgewichtige Threads, die geringere Laufzeitkosten bei der Instanziierung vorweisen. Dadurch können sie schneller und in größeren Mengen erstellt werden.
     Sie führen ihre Aufgaben auf einem \gls{pt} aus, von dem sie bei Bedarf wieder gelöst werden können. Somit werden sie im Gegensatz zu \Glspl{pt} von der \gls{jvm} verwaltet.
-    Im Vergleich zu \Glspl{pt} weisen \Glspl{vt} wenig Nachteilen auf. Lediglich bei wenigen, stark rechenintensiven Aufgaben ganz ohne blockierenden Aufrufen sollten \Glspl{pt} bevorzugt werden da
-    sie in diesem Fall einen kleinen Overhead verursachen. In den meisten Fällen ist dieser aber vernachlässigbar. Sollten Threads kurzlebig sein oder in großen Mengen benötigt werden, sind \Glspl{vt} definitiv
-    zu bevorzugen, wegen ihrer Leichtgewichtigkeit und der hohen Verfügbarkeit. Auch bei Aufgaben die oft blockiert werden, sollten sie eingesetzt werden. In der Verwendung unterscheiden sie sich zu \Glspl{pt} 
+    Im Vergleich zu \Glspl{pt} weisen \Glspl{vt} wenig Nachteile auf. Lediglich bei wenigen, stark rechenintensiven Aufgaben ganz ohne blockierende Aufrufe sollten \Glspl{pt} bevorzugt werden, da \Glspl{vt}
+    in diesem Fall einen kleinen Overhead verursachen. In den meisten Fällen ist dieser aber vernachlässigbar. Sollten Threads kurzlebig sein oder in großen Mengen benötigt werden, sind \Glspl{vt}
+    wegen ihrer Leichtgewichtigkeit und der hohen Verfügbarkeit definitiv
+    zu bevorzugen. Auch bei Aufgaben, die oft blockiert werden, sollten sie eingesetzt werden. In der Verwendung unterscheiden sie sich von \Glspl{pt} 
     meist nur bei der verwendeten Factory-Methode und können wie gewohnt benutzt werden.
-    Somit können sie in fast allen Fällen getrost anstatt \Glspl{pt} eingesetzt werden.
+    Somit können sie in fast allen Fällen getrost anstatt \Glspl{pt} eingesetzt werden. Andere Probleme der nebenläufigen Programmierung wie "Deadlocks" oder "Race-conditions" werden durch \Glspl{vt} nicht gelöst.
+    Mit diesen Schwierigkeiten muss sich weiterhin der Anwender plagen.
 
-    \Glspl{sts} sollen die Handhabung und nebenläufigen Aufgaben vereinfachen und strukturierten. Dabei geht es darum ähnliche Teilaufgaben als eine Einheit zu koordinieren. Dabei können allgemeine
-    Ausführungslogik und Fehlerbehandlung festgelegt und wiederverwendet werden indem man von der Basisklasse ableitet und meist einfache Anpassungen vornimmt. Ein einziger Methodenaufruf wartet auf
+    \Glspl{sts} sollen die Handhabung von nebenläufigen Aufgaben vereinfachen und strukturieren. Dabei geht es darum, eine Menge an ähnlichen Teilaufgaben als eine Einheit zu koordinieren. Dabei können allgemeine
+    Ausführungslogik und Fehlerbehandlung festgelegt und wiederverwendet werden, indem man von der Basisklasse ableitet und meist einfache Anpassungen vornimmt. Ein einziger Methodenaufruf wartet auf
     die Beendung aller Teilaufgaben.
     Diese Eigenschaften können mit Thread-Pools nur
     schwer erreicht werden. Im Hintergrund werden \Glspl{vt} benutzt,
-    daher ist eine gute Skalierbarkeit gegeben. Außerdem stellen sie derzeit die einzige Möglichkeit dar threadübergreifende Vererbung bei \texttt{ScopedValue}s zu erreichen.
+    daher ist eine gute Skalierbarkeit gegeben. Außerdem stellen sie derzeit die einzige Möglichkeit dar, threadübergreifende Vererbung bei \texttt{ScopedValue}s zu erreichen.
 
     \texttt{ScopedValue}s ermöglichen die Bindung von Werten an einen Wertebereich, auch über Methodengrenzen hinweg. Im Gegensatz zu \texttt{ThreadLocal} sind diese Werte nicht veränderbar was zu einer 
-    besseren Struktur und leichter lesbaren Code führen kann. Alternativ kann der Wert in einem neuen Bereich überschrieben werden. Der Wert wird nach Verlassen des Bereichs auch wieder freigeben und
+    besseren Struktur und leichter lesbarem Code führen kann. Alternativ kann der Wert in einem neuen Bereich überschrieben werden. Der Wert wird nach Verlassen des Bereichs auch wieder freigegeben und
     benötigt keine weitere Aufmerksamkeit. Im direkten Vergleich zu \texttt{ThreadLocal} sind sie bei der Wertabfrage zwar langsamer, stellen sich aber bei einer threadübergreifenden Vererbung als schneller heraus.
     Zusätzlich benötigen sie bei großen Mengen an Threads wesentlich weniger Speicher und sind daher für die Verwendung in Kombination mit \Glspl{vt} sehr zu empfehlen. 

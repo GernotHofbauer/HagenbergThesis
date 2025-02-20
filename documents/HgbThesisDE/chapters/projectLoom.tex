@@ -2,7 +2,7 @@
 \label{cha:ProjectLoom}
 
     Projekt Loom wurde 2017 von Ron Pressler ins Leben gerufen und ist ein Open-Source-Projekt, 
-    das sich auf die Verbesserung der \gls{jvm} konzentriert. Das Ziel von Project Loom ist es, 
+    welches sich auf die Verbesserung der \gls{jvm} konzentriert. Das Ziel von Project Loom ist es, 
     die \gls{jvm} so zu erweitern, dass der Aufwand für das Schreiben, Warten und Überwachen von hochdurchsatzfähigen nebenläufigen Anwendungen,
     die die verfügbare Hardware optimal nutzen, drastisch reduziert wird \cite{ProjectLoom}.
 
@@ -22,7 +22,7 @@
 
     \emph{Bereichsgebundene Werte (Scoped Values)} sind Werte, deren Gültigkeitsbereich nach Belieben festgelegt werden kann.
     Auch Verschachtelungen der Bereiche oder das
-    Zuweisen verschiedener Werte auf verschiedenen Threads, ähnlich zu \texttt{ThreadLocal<>}, sind möglich. Ihre Effizienz wurde auf \Glspl{vt} optimiert
+    Zuweisen verschiedener Werte auf verschiedene Threads, ähnlich zu \texttt{ThreadLocal<>}, sind möglich. Ihre Effizienz wurde auf \Glspl{vt} optimiert
     \cite{JEP481}.
     Project Loom ist ein laufendes Projekt und manche Funktionalitäten sind noch als Preview-Funktionalität eingestuft und können in späteren Versionen Änderungen 
     unterzogen werden oder sogar wieder entfernt werden.
@@ -32,7 +32,7 @@
 \section{Virtuelle Threads}                                 % 5 Seiten ---------------------------------------------------------------------------------------------------------
 \label{sec:VirtuelleThreads}
 
-Virtuelle Threads sind die das Herzstück von Projekt Loom und eine neue Funktion in der Java Virtual Machine (JVM), die es ermöglicht, Millionen von Threads effizient zu verwalten.
+Virtuelle Threads sind das Herzstück von Projekt Loom und eine neue Funktion in der Java Virtual Machine (JVM), die es ermöglicht, Millionen von Threads effizient zu verwalten.
 Sie sind leichtgewichtig und bieten eine bessere Skalierbarkeit für nebenläufige Anwendungen.
 \Glspl{vt} entlasten Entwickler von der Komplexität der Thread-Verwaltung und verbessern die Performanz von Anwendungen erheblich.
 
@@ -41,7 +41,7 @@ Sie sind leichtgewichtig und bieten eine bessere Skalierbarkeit für nebenläufi
 \label{subsec:WassindVTs?}
 
     Im Gegensatz zu dem bisherigen Threadmodell von Java hängt die Implementierung von \Glspl{vt} nicht so stark von den \Glspl{ot} ab. Sie führen zwar noch Code 
-    auf diesen aus aber binden diesen nicht mehr ihre gesamte Lebenszeit lang an sich, im Gegensatz zu den herkömmlichen \Glspl{pt}. Dies hat zur Folge, 
+    auf diesen aus, aber binden diesen nicht mehr ihre gesamte Lebenszeit lang an sich, im Gegensatz zu den herkömmlichen \Glspl{pt}. Dies hat zur Folge, 
     dass mehrere \Glspl{vt} Aufgaben zeitversetzt auf ein und demselben \gls{ot} ausführen können und die maximale Anzahl der \Glspl{vt}
     die maximale Anzahl von \Glspl{ot} wesentlich überschreiten kann.
     Virtuelle Threads werden aber nicht direkt auf OS Threads aufgesetzt, sondern auf Plattform Threads.
@@ -59,7 +59,7 @@ Sie sind leichtgewichtig und bieten eine bessere Skalierbarkeit für nebenläufi
     \gls{jvm} einen \gls{vt} von dem ihm zugeteilten \gls{pt} temporär lösen und einen anderen \gls{vt} darauf Code ausführen lassen, da das Blockieren von \Glspl{vt}
     sehr billig ist. Dies hat zur Folge, dass \Glspl{vt} nur dann Rechenzeit erhalten, wenn sie auch benötigt wird. Somit wird der Durchsatz an Recheninstruktionen
     eines \gls{pt} stark erhöht.
-    Wird aber nur ein einzelner Thread benötigt, können diese Vorteile nicht genutzt werden. Der \gls{pt}, dem der \gls{vt} zugewiesen wurde, bindet den \gls{ot} auch
+    Wird aber nur ein einzelner Thread benötigt, können diese Vorteile nicht genutzt werden. Der \gls{pt}, dem der \gls{vt} zugewiesen wurde, bindet den \gls{ot}
     an sich, selbst wenn kein \gls{vt} Code ausführt \cite{JEP444}.
     
 
@@ -121,7 +121,7 @@ public static void main(String[] args) {
     \ref{prog:ErstellungEinesVT} benutzt, um einen neuen virtuellen Thread zu erstellen. Dabei kann der \texttt{unstarted} Methode ein \texttt{Runnable} mitgegeben werden, um den Thread später mit 
     \texttt{start} zu starten. Alternativ kann auch ohne der 
     \texttt{unstarted} Methode \texttt{.start(Runnable r)} aufgerufen werden, um den Thread sofort zu starten. 
-    Analog dazu wurde die die Factory-Methode \texttt{ofPlatform(Runnable task)} zur Erstellung von \Glspl{pt} hinzugefügt um die Schnittstellen konsistenter zu gestalten.
+    Analog dazu wurde die Factory-Methode \texttt{ofPlatform(Runnable task)} zur Erstellung von \Glspl{pt} hinzugefügt um die Schnittstellen konsistenter zu gestalten.
     Sollte ein \gls{vt} sofort gestartet werden, kann auch \texttt{startVirtualThread} 
     wie in Zeile 7 benutzt werden. Diese Methode nimmt ebenfalls ein
     \texttt{Runnable} als Parameter. \texttt{Thread.join()} lässt genauso wie bei \Glspl{pt} den aktuellen Thread 
@@ -149,7 +149,7 @@ public static void main(String[] args) {
     \end{program}
     Sollte der auszuführende Code einen Rückgabewert liefern, kann wie in Programm \ref{prog:VTMitRückgabewert} in Zeile 6 dem Thread eine \texttt{FutureTask<>} mitgegeben werden. Diese nimmt wiederum
     ein \texttt{Callable<>}, das im Gegensatz zum \texttt{Runnable} einen Wert retourniert. Das Ergebnis kann -- wie in Zeile 8 -- mit der Methode \texttt{get()} abgefragt werden.
-    Diese Methode wartet auf das Ergebnis indem sie den Eltern-Thread blockiert und somit das \texttt{join()} ersetzt.
+    Diese Methode wartet auf das Ergebnis, indem sie den Eltern-Thread blockiert und somit das \texttt{join()} ersetzt.
 
 
 
@@ -188,7 +188,7 @@ public static void main(String[] args) {
 
     Dabei können Regeln für verschiedene Attribute wie eine Namenskonvention
     in einem Schritt für alle späteren Threads festgelegt werden, was Codeduplizierung entgegenwirkt.
-    Die Methode \texttt{name(String, long)} ermöglicht eine automatisierte fortlaufende Benennung zukünftig erstellten Threads. Wie wie in Zeile 3 in Programm 
+    Die Methode \texttt{name(String, long)} ermöglicht eine automatisierte, fortlaufende Benennung zukünftig erstellter Threads. Wie in Zeile 3 in Programm 
     \ref{prog:ErstellungEinesVTBuilders} zu sehen ist, nimmt die Methode einen Präfix in Form einer Zeichenkette und einen Startwert vom primitiven
     Datentypen \texttt{long}. Der erste durch den Builder erstellte Thread bekommt als Namen eine Konkatinierung des Präfixes und des Startwertes. Bei jedem weiteren Thread wird der Startwert um eins inkrementiert. Lässt man den Startwert als Methodenparameter weg, heißen alle Threads gleich 
     \cite{oracle22Builder}. 
@@ -215,7 +215,7 @@ public static void main(String[] args) {
     Wird eine große Anzahl an \Glspl{vt} benötigt,  ist ein Executor bzw. Threadpool empfehlenswert. Dieser sollte in Kombination mit einem
     try-with-resources-Block verwendet werden, da dieser beim Verlassen des Blockes implizit geschlossen wird. Wird dies nämlich nicht gemacht, kann es
     im Falle einer Ausnahme dazu kommen, dass ein Thread nicht beendet wird und so als Thread-Leck weiterhin im Hintergrund Systemressourcen verschwendet.
-    Der \texttt{ExecutorService} der mit der statischen Fabrikmethode \texttt{.newVirtualThreadPerTaskExecutor()} erstellt wird, 
+    Der \texttt{ExecutorService}, der mit der statischen Fabrikmethode \texttt{.newVirtualThreadPerTaskExecutor()} erstellt wird, 
     erstellt im Gegensatz zum herkömmlichen \texttt{ExecutorService} für jede Aufgabe einen neuen \gls{vt}. Die Instanziierung und Verwendung eines solchen \texttt{ExecutorService} 
     ist in Programm \ref{prog:ErstellungEinesExecutors} in Zeile 2 zu sehen.
     Sollten die Aufgaben einen Wert retournieren, muss anstatt \texttt{execute} die Methode \texttt{submit} benutzt werden. Dies liefert ein \texttt{Future<T>}-Objekt 
@@ -238,7 +238,7 @@ public static void main(String[] args) {
     \emph{Strukturierte Nebenläufigkeit (Structured Concurrency)} in Project Loom fügt die Klasse \texttt{\gls{sts}} und 2 Ableitungen davon zur Standartbibliothek von Java hinzu
     und befindet sich derzeit noch in
     aktiver Entwicklung. Das heißt, dass sich verschiedene Funktionalitäten ändern oder wieder entfernt werden können.
-    Die zu strukturierten Nebenläufigkeit gehörigen Klassen ermöglichen
+    Die zur strukturierter Nebenläufigkeit gehörigen Klassen ermöglichen
     es, eine Gruppe von parallelen Teilaufgaben als eine Einheit zu koordinieren. Allgemeine Ausführungslogik und Fehlerbehandlung kann dadurch schon vorher festgelegt und 
     wiederverwendet werden.
     Wie der Name bereits verrät, wird dabei ein Block festgelegt, in dem diese Teilaufgaben erstellt und behandelt werden.
@@ -277,7 +277,7 @@ public static void main(String[] args) {
     hätte beispielsweise eine einschränkende Wirkung.
     Es wird stark empfohlen, einen \gls{sts} in Form eines try-with-resources-Blocks zu realisieren, da dieser den Gültigkeitsbereich wieder schließt. In diesem Block
     werden Teilaufgaben mit der Methode \texttt{.fork(Runnable r)} erschaffen. Dieser Vorgang kann in Programm \ref{prog:BeispielFürEinenEinfachenSts} in den Zeilen 3, 7 und 11 beobachtet werden.
-    Diesen Teilaufgaben haben den Rückgabewert \texttt{StructuredTaskScope.Subtask<T>}, wobei sie keine
+    Diese Teilaufgaben haben den Rückgabewert \texttt{StructuredTaskScope.Subtask<T>}, wobei sie keine
     primitiven Datentypen aufnehmen können. Mit \texttt{.state()} kann überprüft werden, ob die einzelnen Ausführungen erfolgreich waren.
     Wichtig dabei ist der Aufruf von \texttt{.join()}. Dadurch wartet der \gls{sts} darauf, dass entweder alle Teilprozesse beendet werden oder
     fehlschlagen, oder
@@ -367,7 +367,7 @@ public static void main(String[] args) {
 \subsection{Erstellung eines eigenen \texttt{StructuredTaskScopes}}
 \label{subsec:ErstellungEinesEigenenSts?}
 
-    Nicht immer erfüllen die zwei Subklassen \texttt{ShutdownOnFailure} und \texttt{ShutdownOnSuccess} den individuellen Anforderungen des Anwenders.
+    Nicht immer erfüllen die zwei Subklassen \texttt{ShutdownOnFailure} und \texttt{ShutdownOnSuccess} die individuellen Anforderungen des Anwenders.
     Es könnte zum Beispiel nur das kleinste Ergebnis aller erfolgreich abgeschlossenen Aufgaben gewünscht werden oder man möchte alle Ergebnisse mit
     einem Methodenaufruf erhalten, ohne die \texttt{Subtask<>}s abspeichern zu müssen.
     Die Klasse \texttt{StructuredTaskScopes<T>} wurde nicht mit \texttt{final} markiert und lässt somit Ableitungen zu. Die für die Erstellung individueller Implementierungen wichtigen
@@ -418,7 +418,7 @@ public class SmallestScope<T> extends StructuredTaskScope<T> {
     Um das kleinste Ergebnis ermitteln zu können, wird zunächst eine Vergleichsmöglichkeit in Form eines \texttt{Comperator<T>}-Objekts benötigt. Dieses wird über den
     Konstruktor injiziert.
     Das Überschreiben der Methoden \texttt{join()} und \texttt{joinUntil(Instant deadline)} ist nicht essentiell, um die Klasse benutzen zu können, sondern ermöglicht
-    lediglich Methodenverkettung. Dies ist zwar nicht dringend nötig, stellt für viele ein erwartetes Verhalten dar.
+    lediglich Methodenverkettung. Dies ist zwar nicht dringend nötig, stellt jedoch für viele Anwender ein erwartetes Verhalten dar.
 
     \begin{program} [H]
         \caption{Überschreiben von \texttt{handleComplete}}
@@ -436,8 +436,8 @@ protected void handleComplete(Subtask<? extends T> subtask) {
     \end{program}
     Die Methode \texttt{handleComplete()} wird von jedem Thread bei Beendung seiner Aufgabe aufgerufen, vorausgesetzt der \gls{sts} wurde beispielsweise durch die Methode 
     \texttt{shut\-down()} noch nicht beendet \cite{oracle21STS}.
-    Um den gewünschten Effekt zu erzielen muss zunächst der Zustand des \texttt{Subtask}s abfragt werden. Beim Zustand \texttt{SUCCESS} kann das Ergebnis in den Behälter für Ergebnisse
-    gespeichert werden. Ist der Zustand \texttt{FAILED} oder \texttt{UNAVAILABLE}, wird die Fehlermeldung abgefragt und in dem dafür vorgesehenen Behälter platziert.
+    Um den gewünschten Effekt zu erzielen, muss zunächst der Zustand des \texttt{Subtask}s abfragt werden. Beim Zustand \texttt{SUCCESS} kann das Ergebnis in den Behälter für Ergebnisse
+    gespeichert werden. Ist der Zustand \texttt{FAILED} oder \texttt{UNAVAILABLE}, wird die Fehlermeldung abgefragt und in den dafür vorgesehenen Behälter platziert.
 
     \begin{program} [H]
         \caption{Retournieren des kleinsten Ergebnisses}
@@ -587,7 +587,7 @@ erstellt wurde und somit keine Vererbung stattgefunden hat.
     Es war nie das Ziel von \texttt{ScopedValues}, \texttt{ThreadLocal} vollends zu ersetzen. Vielmehr sollte eine Alternative mit Vorteilen in spezifischen Situationen geschaffen werden.
     Jeder \gls{pt} hat eine Instanz von \texttt{ThreadLocal.ThreadLocalMap} als Datenkomponente. Dieser Datenbehälter ist ein dynamisch wachsendes Feld aus
     der Klasse \texttt{Entry}, die eine Referenz auf die \texttt{ThreadLocal}-Klasse als Schlüssel
-    und deren für diesen Thread gültigen Wert als Paar abspeichert. Dadurch hat jeder Thread seine eigene Instanz der Variable zur Verfügung stehen, die jederzeit gelesen und beschrieben werden kann.
+    und dessen für diesen Thread gültigen Wert als Paar abspeichert. Dadurch hat jeder Thread seine eigene Instanz der Variable zur Verfügung stehen, die jederzeit gelesen und beschrieben werden kann.
     Dieser Behälter wird aber nicht vom Thread, sondern von der Klasse \texttt{Threadlocal} verwaltet. 
     \begin{figure}[H]
         \centering
@@ -602,7 +602,7 @@ erstellt wurde und somit keine Vererbung stattgefunden hat.
 
     \texttt{ScopedValue} hingegen ist wie ein Behälter-Objekt, das den tatsächlichen Datenwert und den Zugriff darauf verwaltet. Die Methode \texttt{get()} sucht beim initialen Aufruf nach
     der Wertbindung des innersten Gültigkeitsbereichs. Dabei werden die Ergebnisse in einem kleinen Cache des Threads zwischengespeichert. Dadurch werden nachfolgenden Aufrufe der
-    Methode stark beschleunigt. Übersteigt die Menge an bereichsgebundenen Variablen die Größe des Cache, leidet die Geschwindigkeit stark daran. Die Größe beträgt normalerweise 16 Einträge
+    Methode stark beschleunigt. Übersteigt die Menge an bereichsgebundenen Variablen die Größe des Cache, leidet die Geschwindigkeit stark darunter. Die Größe beträgt normalerweise 16 Einträge
     und lässt sich mit der \gls{jvm}-Option \texttt{-Djava.lang.ScopedValue.cacheSize=<newSize>} auf eine Größe von 2 bis 16 in 2er-Potenzen verändern. Dabei muss ein Kompromiss
     zwischen Speicherbedarf und Geschwindigkeit gefunden werden. Werden mehr Werte benötigt, kann es sinnvoll sein, sie in einem Record zusammenzufassen und so an eine Instanz von ScopedValue
     zu binden. 
@@ -611,16 +611,16 @@ erstellt wurde und somit keine Vererbung stattgefunden hat.
     Bei \texttt{ScopedValue} wird dieser Vorgang nicht benötigt. Dadurch fällt viel an Verwaltungsaufwand weg. 
 
     Bei \texttt{ThreadLocal} wird, wenn einmal mit der \texttt{set}-Methode gesetzt, die Lebensdauer des Wertes nur durch die Lebensdauer des Threads begrenzt und sollte immer mit dem Methodenaufruf
-    \texttt{remove} wieder freigegeben werden. Bei langlebigen Threads kann dies zu nicht notwendigen Speicherbedarf führen. Bei Verwendung eines Threadpools -- vor allem eines \emph{newCachedThreadPool} -- 
-    können bestehende \Glspl{pt}, falls verfügbar, wiederverwendet werden. Diese Vorgehen kann zwar die Geschwindigkeit des Programms erhöhen, jedoch können dadurch auch Variablen,
+    \texttt{remove} wieder freigegeben werden. Bei langlebigen Threads kann dies zu nicht notwendigem Speicherbedarf führen. Bei Verwendung eines Threadpools -- vor allem eines \emph{newCachedThreadPool} -- 
+    können bestehende \Glspl{pt}, falls verfügbar, wiederverwendet werden. Dieses Vorgehen kann zwar die Geschwindigkeit des Programms erhöhen, jedoch können dadurch auch Variablen,
     wenn nicht manuell entfernt, in eine andere Aufgabe gelangen und so eine potentielle Sicherheitslücke darstellen. Der \emph{Garbage-Collector} kann die Variable nicht freigeben, da sie noch über 
     den Thread also einer \emph{GC-Root} erreichbar bleibt. Bei \texttt{ScopedValue}s hingegen ist die Lebenszeit an den Gültigkeitsbereich, der als \texttt{Runnable} der \texttt{run}-Methode mitgegeben wird,
     gebunden. Dadurch wird der Wert unzugänglich, wenn der Gültigkeitsbereich wieder verlassen wird. Eine manuelle Entfernung durch einen Methodenaufruf ist nicht nötig.
 
     Einen weiteren Unterschied stellt die Veränderbarkeit der Variablen dar. \texttt{Thread\-Local}-Variablen sind uneingeschränkt mit der \texttt{set} Methode veränderbar.
-    Auch die Verwendung der Schlüsselwortes \texttt{final} schützt nicht davor. Dadurch wird ein Datenfluss in alle Richtungen zwischen Methoden gewährleistet. Dies kann zu sehr unübersichtlichen 
-    Kommunikationsfluss in Form von sogenannten "Spaghetti-Code" führen. Die Klasse \texttt{ScopedValue} hingegen lässt einen Datenfluss nur in eine Richtung zu. Der Wert kann innerhalb des 
-    Gültigkeitsbereichs durch einen neuen verschachtelten Gültigkeitsbereich überschrieben werden. Diese Änderung ist aber nicht mehr außerhalb des neuen Bereichs sichtbar und ist damit im Aufrufstapels weiter
+    Auch die Verwendung des Schlüsselwortes \texttt{final} schützt nicht davor. Dadurch wird ein Datenfluss in alle Richtungen zwischen Methoden gewährleistet. Dies kann zu sehr unübersichtlichem
+    Kommunikationsfluss in Form von sogenanntem "Spaghetti-Code" führen. Die Klasse \texttt{ScopedValue} hingegen lässt einen Datenfluss nur in eine Richtung zu. Der Wert kann innerhalb des 
+    Gültigkeitsbereichs durch einen neuen verschachtelten Gültigkeitsbereich überschrieben werden. Diese Änderung ist aber nicht mehr außerhalb des neuen Bereichs sichtbar und ist damit im Aufrufstapel weiter
     unten nicht gültig \cite{JEP481}.
     \begin{program} [H]
         \caption{ThreadLocal}

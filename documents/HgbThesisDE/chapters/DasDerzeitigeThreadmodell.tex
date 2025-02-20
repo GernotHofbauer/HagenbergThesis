@@ -6,16 +6,17 @@
 \section{Funktionsweise}                                         
 \label{sec:Funktionsweise}
 
-    Bisher war jeder Thread in der \gls{jvm} eine Instanz von \texttt{java.lang.Thread} auch \gls{pt} genannt. Diese Klasse stellt einen Wrapper-Klasse um \Glspl{ot} dar und Instanzen dieser Klasse
+    Bisher war jeder Thread in der \gls{jvm} eine Instanz von \texttt{java.lang.Thread}, auch \gls{pt} genannt. Diese Klasse stellt eine Wrapper-Klasse um \Glspl{ot} dar und Instanzen dieser Klasse
     binden den darunterliegenden \gls{ot}  während ihrer gesamten Lebenszeit an sich. Dadurch ist die Anzahl der gesamt verfügbaren \Glspl{pt} durch die Anzahl der \Glspl{ot} begrenzt und die Verwaltung
     der Ressourcen wie CPU-Rechenzeit unterliegt dem Betriebssystem \cite{JEP425}.
     \texttt{java.lang.Thread} implementiert die Schnittstelle \texttt{Runnable} und lässt Ableitungen zu.
-    Außerdem können sogenannte \emph{Thread-Pools} genutzt werden. Dabei handelt es sich um einen Mechanismus der mehrere \texttt{worker-threads} verwaltet. Diese existieren unabhängig von dem \texttt{Runnable},
-    das sie ausführen. Die Verwendung von Thread-Pools verringert den Overhead der sich durch die Erstellung von Threads ergibt \cite{ThreadPool}. Thread-Pools können über die Konstruktoren der Klasse \texttt{ThreadPoolExecutor}
-    erstellt werden, es ist jedoch üblich auf die Factory-Methoden der Klasse \texttt{Executors} zurückzugreifen. Die Methode \texttt{newFixedThreadPool(int int nThreads)} ermöglicht es 
+    Außerdem können sogenannte \emph{Thread-Pools} genutzt werden. Dabei handelt es sich um einen Mechanismus, der mehrere \texttt{worker-threads} verwaltet. Diese existieren unabhängig von dem \texttt{Runnable},
+    das sie ausführen. Die Verwendung von Thread-Pools verringert den Overhead, der sich durch die Erstellung von Threads ergibt \cite{ThreadPool}. Thread-Pools können über die Konstruktoren der Klasse 
+    \texttt{ThreadPoolExecutor}
+    erstellt werden, es ist jedoch üblich auf die Factory-Methoden der Klasse \texttt{Executors} zurückzugreifen. Die Methode \texttt{newFixedThreadPool(int nThreads)} ermöglicht es, 
     die Menge an Threads konstant zu halten. Wird ein Thread beendet, durch einen Fehler oder Abschluss der Arbeit, erstellt der Pool sofort einen neuen. Andere Implementierungen wie der 
-    \texttt{newThread\-PerTaskExecutor} versuchen für jede Aufgabe einen eigenen Thread zu erstellen. Alle Aufgaben die nicht direkt bearbeitet werden können, 
-    speichert der Thread-Pool in einem Behälter zwischen. Thread-Pools müssen nach der Verwendung wieder geschlossen werden, entweder mittels \texttt{shutdown()} oder der Verwendung eines
+    \texttt{newThread\-PerTaskExecutor} versuchen für jede Aufgabe einen eigenen Thread zu erstellen. Alle Aufgaben, die nicht direkt bearbeitet werden können, 
+    speichert der Thread-Pool in einem Behälter zwischen. Thread-Pools müssen nach der Verwendung wieder geschlossen werden. Entweder mittels \texttt{shutdown()} oder der Verwendung eines
     try-with-resources-Blocks.
     Die \gls{jvm} kann bei Verwendung eines \texttt{CachedThreadPool}s Threads, die ihre Arbeit bereits 
     abgeschlossen haben, wiederverwenden, um eine neue Instanziierung zu vermeiden. Dabei werden Threads, die ihre Aufgabe bereits abgeschlossen haben, für weitere 60 Sekunden am Leben erhalten um 
@@ -29,8 +30,8 @@
     Sie müssen alle verschiedene Sprachen und Aufgaben unterstützen. Es ist wichtig, dass sie die Ausführung eines Prozesses unterbrechen und
     wiederaufnehmen können, 
     was das Speichern des Zustands (z.B. des Stack-Pointers und des Program-Counters) erfordert. Da das Betriebssystem keine Informationen darüber hat, wie
-    eine Sprache ihren Stapel verwaltet, wird der Speicher großzügig zugeteilt und kann zur Laufzeit weiter wachsen, aber nicht dynamisch schrumpfen,
-    was bei Aufgaben mit einer langen durchgängigen Ausführung zu Problemen führen kann. Da der Betriebssystem-Kernel jegliche Art von Threads verwalten muss,
+    eine Sprache ihren Stapel verwaltet, wird der Speicher großzügig zugeteilt und kann zur Laufzeit weiter wachsen, aber nicht dynamisch schrumpfen. Dies kann
+    bei Aufgaben mit einer langen durchgängigen Ausführung zu Problemen führen. Da der Betriebssystem-Kernel jegliche Art von Threads verwalten muss,
     die unterschiedlichste Aufgaben ausführen können -- von HTTP-Requests bis zu leistungsintensiven Berechnungen -- müssen bei der
     Verwaltung der CPU Kompromisse eingegangen werden. Dies führt dazu, dass einem Thread CPU-Zeit zugeteilt werden kann, obwohl dieser nur wartet. Außerdem wird die Menge 
     an verfügbaren Threads durch das Betriebssystem begrenzt. So kann der Durchsatz einer "Thread pro Aufgabe" - Architektur eingeschränkt sein, auch wenn das Limit der 
@@ -38,7 +39,7 @@
     einen Thread-Pool erstellen und ein anderer erstellt dafür Aufgaben und ein dritter Thread erhält irgendwie eine Referenz auf das \texttt{Future}-Objekt und kann somit auf das Ergebnis warten.
     Es besteht also eine lose Bindung zwischen den Eltern- und Kind-Threads. In manchen Fällen mag sich dies zwar als vorteilhaft erweisen, jedoch steigt dadurch auch der Aufwand einer potentiellen 
     Fehlersuche. In vielen Fällen ist eine stärkere Kontrolle durch den Eltern-Thread erwünscht um \zB eine zentrale Fehlerbehandlung zu ermöglichen oder die Freigabe von Ressourcen zu garantieren.
-    Das Einbinden allgemeiner Logik, die für alle Threads des Pools gelten soll erweist sich auch als sehr schwierig. Sollten beispielsweise alle Aufgaben eines Thread-Pools abgebrochen werden,
+    Das Einbinden allgemeiner Logik, die für alle Threads des Pools gelten soll, erweist sich auch als sehr schwierig. Sollten beispielsweise alle Aufgaben eines Thread-Pools abgebrochen werden,
     wenn auch nur eine fehlschlägt, lässt sich dies derzeit oft nur schwer umsetzen und das Ergebnis neigt meist dazu sehr unübersichtlich zu werden \cite{JEP453}. 
     
 
