@@ -1,13 +1,17 @@
 \chapter{Kurzfassung}
 
-    Diese Bachelorarbeit befasst sich mit einigen Neuerungen von \emph{Project Loom} für Java. Eingegangen wird dabei auf \emph{virtuelle Threads}, \emph{StructuredTaskScopes},
+    Diese Bachelorarbeit befasst sich mit einigen Neuerungen von \emph{Project Loom} für Java. Es wird detailliert auf \emph{virtuelle Threads}, \emph{StructuredTaskScopes},
     die auch auf virtuellen Threads basieren
-    und \emph{ScopedValues}.
+    und \emph{ScopedValues} eingegangen.
     Zu jeder dieser Technologien wird zunächst eine technische Übersicht geboten, bei der darauf eingegangen wird, inwiefern sie sich von den bereits bekannten Technologien unterscheiden.
-    Darauf folgt eine eine Erklärung wie sie in Java verwendet werden können, wobei einige Beispiele gezeigt werden. 
+    Darauf folgt eine eine Erklärung, wie sie in Java verwendet werden können, wobei einige Beispiele gezeigt werden. 
     Bei \texttt{StructuredTaskScopes} beinhaltet dies auch das Einbinden eigener Logik und Fehlerbehandlung durch Ableitung von der Basisklasse. Bei \texttt{ScopedValues} wird auch auf die Unterschiede zu \texttt{ThreadLocal} eingegangen. 
-    Um eine besseren Vergleich ziehen zu können, wird auch auf die Performance eingegangen. Dazu wurden sechs einfache Benchmarks,
-    welche das Laufzeitverhalten untersuchen, erstellt und durchgeführt. Dabei kam das
-    „Java Microbenchmark Harness (JMH)“ zum Einsatz. Aufgrund Schwierigkeiten
-    beim Messen des Speicherverbrauchs wurde zu diesem Aspekt nur ein Test durchgeführt. Jedes Messergebnis ist mit eine Analyse versehen.
-    Auf Basis der Recherche und der Ergebnisse der Benchmarks wird letzten Endes im Fazit eine Zusammenfassung der Stärken und potentiellen Anwendungsszenarien gegeben.
+    Um eine besseren Vergleich zwischen den bekannten Technologien und den Neuerungen von Projekt Loom ziehen zu können, wird das Laufzeitverhalten eingehend analysiert. Dazu wurden sechs einfache Benchmarks,
+    welche das Laufzeitverhalten untersuchen, erstellt und durchgeführt. Aufgrund von Schwierigkeiten
+    beim Messen des Speicherverbrauchs wurde zu diesem Aspekt nur ein Test durchgeführt. Die Messergebnisse wurden ausführlich analysiert und interpretiert.
+    Dabei wurde festgestellt, dass virtuelle Threads in in den meisten Fällen Plattform-Threads überlegen sind. Lediglich bei wenigen, stark rechenintensiven Aufgaben, ganz ohne blockierende Aufrufe, 
+    sollten Plattform-Threads bevorzugt werden. Eine der größten Stärken von virtuellen Threads ist die Möglichkeit, in sehr großen Mengen, ohne viel Overhead erstellt zu werden. 
+    Dadurch skalieren sie besser und sind leichtgewichtiger als Plattform-Threads.
+    ScopedValues sind bei der Vererbung von Werten über Threads hinweg schneller als ThreadLocal und benötigen bei großen Mengen an Threads wesentlich weniger Speicher. 
+    Sie können daher in Kombination mit virtuellen Threads sehr empfohlen werden. Die Wertabfrage selbst ist aber ein wenig langsamer als bei ThreadLocal.
+    Im Gegensatz zu ThreadLocal sind ScopedValues nicht veränderbar und können somit nicht immer als Ersatz verwendet werden.

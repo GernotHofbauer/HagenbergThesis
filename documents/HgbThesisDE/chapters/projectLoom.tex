@@ -44,7 +44,7 @@ Sie sind leichtgewichtig und bieten eine bessere Skalierbarkeit für nebenläufi
     auf diesen aus, aber binden diesen nicht mehr ihre gesamte Lebenszeit lang an sich, im Gegensatz zu den herkömmlichen \Glspl{pt}. Dies hat zur Folge, 
     dass mehrere \Glspl{vt} Aufgaben zeitversetzt auf ein und demselben \gls{ot} ausführen können und die maximale Anzahl der \Glspl{vt}
     die maximale Anzahl von \Glspl{ot} wesentlich überschreiten kann.
-    Virtuelle Threads werden aber nicht direkt auf OS Threads aufgesetzt, sondern auf Plattform Threads.
+    Virtuelle Threads werden aber nicht direkt auf OS Threads aufgesetzt, sondern auf Plattform-Threads.
     Daher werden diese auch oft als "Carrier Threads" bezeichnet \cite{ieee2022}.
     
 
@@ -277,7 +277,7 @@ public static void main(String[] args) {
     hätte beispielsweise eine einschränkende Wirkung.
     Es wird stark empfohlen, einen \gls{sts} in Form eines try-with-resources-Blocks zu realisieren, da dieser den Gültigkeitsbereich wieder schließt. In diesem Block
     werden Teilaufgaben mit der Methode \texttt{.fork(Runnable r)} erschaffen. Dieser Vorgang kann in Programm \ref{prog:BeispielFürEinenEinfachenSts} in den Zeilen 3, 7 und 11 beobachtet werden.
-    Diese Teilaufgaben haben den Rückgabewert \texttt{StructuredTaskScope.Subtask<T>}, wobei sie keine
+    Diese Teilaufgaben haben den Rückgabewert \texttt{StructuredTaskScope.Sub\-task<T>}, wobei sie keine
     primitiven Datentypen aufnehmen können. Mit \texttt{.state()} kann überprüft werden, ob die einzelnen Ausführungen erfolgreich waren.
     Wichtig dabei ist der Aufruf von \texttt{.join()}. Dadurch wartet der \gls{sts} darauf, dass entweder alle Teilprozesse beendet werden oder
     fehlschlagen, oder

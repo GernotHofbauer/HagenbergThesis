@@ -19,7 +19,7 @@
     speichert der Thread-Pool in einem Behälter zwischen. Thread-Pools müssen nach der Verwendung wieder geschlossen werden. Entweder mittels \texttt{shutdown()} oder der Verwendung eines
     try-with-resources-Blocks.
     Die \gls{jvm} kann bei Verwendung eines \texttt{CachedThreadPool}s Threads, die ihre Arbeit bereits 
-    abgeschlossen haben, wiederverwenden, um eine neue Instanziierung zu vermeiden. Dabei werden Threads, die ihre Aufgabe bereits abgeschlossen haben, für weitere 60 Sekunden am Leben erhalten um 
+    abgeschlossen haben, wiederverwenden, um eine neue Instanziierung zu vermeiden. Dabei werden Threads, die ihre Aufgabe bereits abgeschlossen haben, für weitere 60 Sekunden am Leben erhalten, um 
     neue Aufgaben darauf ausführen zu können. Erst danach werden sie freigegeben. Natürlich können bei Bedarf neue Threads erstellt werden \cite{Executors}.
 
     
@@ -38,8 +38,8 @@
     Hardware noch nicht erreicht wurde \cite{ProjectLoom}. Bei Verwendung von Thread-Pools wird schnell klar, dass diese sehr unstrukturiertes Vorgehen ermöglichen. Ein Thread kann beispielsweise 
     einen Thread-Pool erstellen und ein anderer erstellt dafür Aufgaben und ein dritter Thread erhält irgendwie eine Referenz auf das \texttt{Future}-Objekt und kann somit auf das Ergebnis warten.
     Es besteht also eine lose Bindung zwischen den Eltern- und Kind-Threads. In manchen Fällen mag sich dies zwar als vorteilhaft erweisen, jedoch steigt dadurch auch der Aufwand einer potentiellen 
-    Fehlersuche. In vielen Fällen ist eine stärkere Kontrolle durch den Eltern-Thread erwünscht um \zB eine zentrale Fehlerbehandlung zu ermöglichen oder die Freigabe von Ressourcen zu garantieren.
+    Fehlersuche. In vielen Fällen ist eine stärkere Kontrolle durch den Eltern-Thread erwünscht, um \zB eine zentrale Fehlerbehandlung zu ermöglichen oder die Freigabe von Ressourcen zu garantieren.
     Das Einbinden allgemeiner Logik, die für alle Threads des Pools gelten soll, erweist sich auch als sehr schwierig. Sollten beispielsweise alle Aufgaben eines Thread-Pools abgebrochen werden,
-    wenn auch nur eine fehlschlägt, lässt sich dies derzeit oft nur schwer umsetzen und das Ergebnis neigt meist dazu sehr unübersichtlich zu werden \cite{JEP453}. 
+    wenn auch nur eine fehlschlägt, lässt sich dies derzeit oft nur schwer umsetzen und das Ergebnis neigt meist dazu, sehr unübersichtlich zu werden \cite{JEP453}. 
     
 

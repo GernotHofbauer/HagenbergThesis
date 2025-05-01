@@ -5,9 +5,14 @@
     This bachelor's thesis deals with some innovations of \emph{Project Loom} for Java. It examines \emph{virtual threads}, \emph{StructuredTaskScopes} that are also based on virtual threads,
     and \emph{ScopedValues}. For each of these technologies, a technical overview is first provided, discussing how they differ from the already known technologies. 
     This is followed by an explanation of how they can be used in Java, with several examples presented. For \texttt{StructuredTaskScopes}, this also includes integrating custom logic and error handling by
-    subclassing the base class. For \texttt{ScopedValues}, the differences compared to \texttt{ThreadLocal} are also addressed. In order to enable a better comparison, performance is also examined. 
-    For this purpose, six simple benchmarks that investigate runtime behavior were created and executed. In doing so, the “Java Microbenchmark Harness (JMH)” was employed. Due to difficulties in measuring 
-    memory consumption, only one test was conducted for this aspect. Each measurement result is accompanied by an analysis. Ultimately, based on the research and the benchmark results, the conclusion provides 
-    a summary of the strengths and potential application scenarios.
+    subclassing the base class. For \texttt{ScopedValues}, the differences compared to \texttt{ThreadLocal} are also addressed. In order to enable a better comparison, an extensive performance analysis is conducted. 
+    For this purpose, six simple benchmarks that investigate runtime behavior were created and executed. Due to difficulties in measuring 
+    memory consumption, only one test was conducted for this aspect. Each measurement result is accompanied by an analysis. 
+    It was found that virtual threads are, in most cases, superior to platform threads. Only in a few highly compute-intensive tasks, with no blocking calls,  platform threads should be preferred. 
+    One of the greatest strengths of virtual threads is the ability to be created in very large numbers without much overhead. As a result, they scale better and are lighter than platform threads.
+    ScopedValues are faster than ThreadLocal when it comes to passing values across threads and require significantly less memory when dealing with large numbers of threads. 
+    They are therefore highly recommended in combination with virtual threads. 
+    The value retrieval itself, however, is a little slower than with ThreadLocal. In contrast to ThreadLocal, ScopedValues are immutable, so they cannot always be used as a substitute.
+
 \end{english}
 

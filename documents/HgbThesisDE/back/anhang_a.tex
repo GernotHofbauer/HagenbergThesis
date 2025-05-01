@@ -10,14 +10,16 @@ public class MemoryUsageComparison {
     private static final int ARRAY_SIZE = 1024 * 1024;
     // Large array to simulate memory usage
 
-    private static final InheritableThreadLocal<byte[]> threadLocal = new InheritableThreadLocal<>() {
-        @Override
-        protected byte[] initialValue() {
-            return new byte[ARRAY_SIZE];
-        }
-    };
+    private static final InheritableThreadLocal<byte[]> threadLocal = 
+        new InheritableThreadLocal<>() {
+            @Override
+            protected byte[] initialValue() {
+                return new byte[ARRAY_SIZE];
+            }
+        };
 
-    private static final ScopedValue<byte[]> scopedValue = ScopedValue.newInstance();
+    private static final ScopedValue<byte[]> scopedValue = 
+        ScopedValue.newInstance();
 
     public static void main(String[] args) throws Exception {
         // Warmup the jvm
@@ -33,7 +35,6 @@ public class MemoryUsageComparison {
         int measurements = 5;
         long[] threadLocalMemory = new long[measurements];
         long[] scopedValueMemory = new long[measurements];
-
     \end{JavaCode}
 \end{program}
 
@@ -46,13 +47,14 @@ public class MemoryUsageComparison {
             long baselineMemory = getUsedMemory();
             System.out.println();
             System.out.println(STR."Measurement \{i + 1}");
-            System.out.println(STR."Baseline Memory: \{formatMemory(baselineMemory)}");
+            System.out.println("Baseline Memory: " + fMem(baselineMemory));
             // ThreadLocal test
             long beforeThreadLocal = getUsedMemory();
             measureThreadLocal(threadCount);
             long afterThreadLocal = getUsedMemory();
             threadLocalMemory[i] = afterThreadLocal - beforeThreadLocal;
-            System.out.println(STR."ThreadLocal Memory Usage: \{formatMemory(threadLocalMemory[i])}");
+            System.out.println("ThreadLocal Memory Usage: " 
+                + fMem(threadLocalMemory[i]));
 
             System.gc();
             Thread.sleep(1000);
@@ -62,13 +64,17 @@ public class MemoryUsageComparison {
             measureScopedValue(threadCount);
             long afterScoped = getUsedMemory();
             scopedValueMemory[i] = afterScoped - beforeScoped;
-            System.out.println(STR."ScopedValue Memory Usage: \{formatMemory(scopedValueMemory[i])}");
+            System.out.println("ScopedValue Memory Usage: " 
+                + fMem(scopedValueMemory[i]));
         }
 
         System.out.println("\nFinal Results:");
-        System.out.println(STR."Average ThreadLocal Memory Usage: \{formatMemory(average(threadLocalMemory))}");
-        System.out.println(STR."Average ScopedValue Memory Usage: \{formatMemory(average(scopedValueMemory))}");
-        System.out.println(STR."Memory Difference: \{formatMemory(Math.abs(average(threadLocalMemory) - average(scopedValueMemory)))}");
+        System.out.println("avg ThreadLocal Memory Usage: " + 
+            fMem(avg(threadLocalMemory))});
+        System.out.println("avg ScopedValue Memory Usage: " + 
+            fMem(avg(scopedValueMemory))});
+        System.out.println("Memory Difference: " + 
+            fMem(Math.abs(avg(threadLocalMemory) - avg(scopedValueMemory)))});
     }
 
     private static void measureThreadLocal(int threadCount) throws Exception {
@@ -91,32 +97,33 @@ public class MemoryUsageComparison {
 
 \begin{program} [H]
     \begin{JavaCode}[language=Java, firstnumber=last]
-        private static void measureScopedValue(int threadCount) throws Exception {
-            ScopedValue.where(scopedValue, new byte[ARRAY_SIZE]).run(() -> {
-                try (var scope = new StructuredTaskScope<Void>()) {
-                    for (int i = 0; i < threadCount; i++) {
-                        scope.fork(() -> {
-                            byte[] data = scopedValue.get();
-                            // Play around with the data
-                            data[0] = (byte) System.nanoTime();
-                            Thread.sleep(50);
-                            return null;
-                        });
-                    }
-                    scope.join();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+    private static void measureScopedValue(int threadCount) throws Exception {
+        ScopedValue.where(scopedValue, new byte[ARRAY_SIZE]).run(() -> {
+            try (var scope = new StructuredTaskScope<Void>()) {
+                for (int i = 0; i < threadCount; i++) {
+                    scope.fork(() -> {
+                        byte[] data = scopedValue.get();
+                        // Play around with the data
+                        data[0] = (byte) System.nanoTime();
+                        Thread.sleep(50);
+                        return null;
+                    });
                 }
-            });
-        }
+                scope.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+    
     private static long getUsedMemory() {
         MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
         return memoryBean.getHeapMemoryUsage().getUsed() +
                 memoryBean.getNonHeapMemoryUsage().getUsed();
     }
 
-    private static String formatMemory(long bytes) {...}
+    private static String fMem(long bytes) {...}
 
-    private static long average(long[] values) {...}
+    private static long avg(long[] values) {...}
 }\end{JavaCode}
     \end{program}

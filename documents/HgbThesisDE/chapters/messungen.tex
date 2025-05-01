@@ -54,22 +54,22 @@ public class PerformanceVirtual {
     public void testMethodeVirtual() throws InterruptedException {
         Thread.startVirtualThread(() -> {
             for (int i = 0; i < nonsenseIterations; i++)
-                Utility.executeNonesense();
+                Utility.executeNonsense();
         }).join();
     }
 }\end{JavaCode}
     \end{program}
     Dieser Benchmark startet einen \gls{vt} und lässt ihn durchgängige rechenintensive Aufgaben erledigen. Um eine Messung durchführen zu können, wartet der Eltern-Thread auf
     die Beendung der Aufgaben. Um den Unterschied in der Laufzeit sichtbarer zu gestalten und die Auswirkungen externer Störungsfaktoren zu minimieren,
-    wird die Berechnung wiederholt ausgeführt. Die Anzahl der Ausführungen ist in Zeile 4 definiert. Der Methodenaufruf \texttt{executeNonesense()} in Zeile 13 stellt die Berechnung dar.
-    Die Methode wird in \ref{prog:ExecuteNoneSense} näher erklärt. Der Benchmark für die \gls{pt} ist bis auf die Art des verwendeten Threads ident.
+    wird die Berechnung wiederholt ausgeführt. Die Anzahl der Ausführungen ist in Zeile 4 definiert. Der Methodenaufruf \texttt{executeNonsense()} in Zeile 13 stellt die Berechnung dar.
+    Die Methode wird in \ref{prog:executeNonsense} näher erklärt. Der Benchmark für die \gls{pt} ist bis auf die Art des verwendeten Threads ident.
     Als Ergebnis wird die gesamte Dauer der Ausführung geliefert. 
 
     \begin{program} [H]
         \caption{Rechenintensive Prozedur}
-        \label{prog:ExecuteNoneSense}
+        \label{prog:executeNonsense}
     \begin{JavaCode}[language=Java, numbers=left]
-public static void executeNonesense() {
+public static void executeNonsense() {
     int limit = 100000; // Adjust this limit for more or less intensity
     boolean[] isPrime = new boolean[limit + 1];
     for (int i = 2; i <= limit; i++) 
@@ -88,7 +88,7 @@ public static void executeNonesense() {
 }\end{JavaCode}
     \end{program}
 
-    Die Methode \texttt{executeNonesense} in \ref{prog:ExecuteNoneSense} errechnet alle Primzahlen zwischen 2 und einer in Zeile 2 definierten Obergrenze. Anschließend wird 
+    Die Methode \texttt{executeNonsense} in \ref{prog:executeNonsense} errechnet alle Primzahlen zwischen 2 und einer in Zeile 2 definierten Obergrenze. Anschließend wird 
     auch noch die Anzahl der Primzahlen ermittelt. Das Ergebnis ist komplett irrelevant und wird nach der Berechnung nicht weiterverwendet. Wichtig ist nur, dass es sich um
     eine aufwändige Berechnung handelt.
 
@@ -99,7 +99,7 @@ public static void executeNonesense() {
         \label{fig:Performance}
     \end{figure}
 
-    Die Graphen in Abbildung \ref{fig:Performance} stellen die Ergebnisse dar. Auf der x-Achse sind die einzelnen Messiterationen abgebildet. Die y-Achse ordnet den einzelnen Iterationen die gemessene
+    Die Graphen in Abbildung \ref{fig:Performance} stellen die Ergebnisse dar. Auf der x-Achse sind die einzelnen Messiterationen abgebildet. Die y-Achse ordnet den einzelnen Messiterationen die gemessene
     Ausführungsdauer zu.
     Das arithmetische Mittel der Ausführungsdauer der \Glspl{vt} beträgt 2240,6391 Millisekunden (ms). 
     \Glspl{pt} benötigten dafür durchschnittlich 2204,6939 ms. Somit beträgt der mittlere Geschwindigkeitsunterschied 1,6 \% zugunsten der \Glspl{pt}.
@@ -127,14 +127,14 @@ public static void executeNonesense() {
 public class VirtualThreadSleep {
 
     @Param("100000")
-    public static int iterations;
+    public static int cnt;
 
     @Benchmark
     @BenchmarkMode(Mode.SampleTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public static void virtualExecutor() { 
         try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
-            IntStream.range(0, iterations).forEach(i -> {
+            IntStream.range(0, cnt).forEach(i -> {
                 Future<Integer> future = executor.submit(() -> {
                     Thread.sleep(Duration.ofSeconds(1)); return i;
                 });
@@ -173,8 +173,8 @@ public class VirtualThreadSleep {
     Dabei platzieren eine Menge an Produzenten, die jeweils als ein eigener Thread implementiert sind, Objekte in eine \texttt{ArrayBlockingQueue} mit einer definierten maximalen Kapazität.
     Die Konsumenten entnehmen die Objekte wiederum aus der Warteschlange. Die \texttt{ArrayBlockingQueue} ist Thread-sicher implementiert und verhindert gleichzeitige Zugriffe. Außerdem werden 
     die Produzenten blockiert, sollte die maximale Kapazität erreicht werden. Dasselbe gilt für die Konsumenten, falls die Warteschlange leer sein sollte. 
-    Damit auch rechenintensive Operationen durchgeführt werden, rufen alle Konsumenten und Produzenten beim Ausführen ihrer Arbeitsschritte die Methode \texttt{executeNoneSense}, ersichtlich
-    in Programm \ref{prog:ExecuteNoneSense} auf.
+    Damit auch rechenintensive Operationen durchgeführt werden, rufen alle Konsumenten und Produzenten beim Ausführen ihrer Arbeitsschritte die Methode \texttt{executeNonsense}, ersichtlich
+    in Programm \ref{prog:executeNonsense} auf.
 
     \begin{figure}[H]
         \centering
@@ -286,13 +286,13 @@ public class ScopedValuesInheritanceBenchmark {
     private static final ScopedValue<String> sv = ScopedValue.newInstance();
 
     @Param({"100000"})
-    private int iterations;
+    private int cnt;
 
     @Benchmark
     public void test(){
         ScopedValue.where(sv, "parent").run(() -> {
             try (var scope = new StructuredTaskScope<Void>()) {
-                for (int i = 0; i < iterations; i++) 
+                for (int i = 0; i < cnt; i++) 
                     scope.fork(() -> {int j = 0; return null; });
                 scope.join();
             } catch (InterruptedException e) {
@@ -330,5 +330,5 @@ public class ScopedValuesInheritanceBenchmark {
     dieser Vorgang für \texttt{InheritableThreadLocal} wiederholt. Nach 5 Messiterationen konnte festgestellt werden, dass \texttt{InheritableThreadLocal} einen 137-fachen Speicherbedarf 
     vorweist, obwohl in jedem Thread ein Zugriff auf den Wert durchgeführt wurde, damit das Caching bei \texttt{ScopedValue} durchgeführt werden könnte. Dieses Verhalten weist darauf hin, dass
     das Zwischenspeichern des Wertes am Thread-Objekt bei \texttt{ScopedValue} in diesem Fall nur begrenzt oder gar nicht durchgeführt wurde. Auch wenn die Methode zur Ermittlung des Speicherbedarfs 
-    nicht unbedingt präzise ist, stellt sich das Ergebnis als so aussagekräftig heraus um einen Schluss ziehen zu können. Sollten viele Threads benötigt werden und der bereitgestellte Wert 
-    nicht in jedem Thread benötigt werden stellt sich \texttt{ScopedValue} als wesentlich speichersparender heraus. Der Quelltext ist im Anhang in Programm \ref{prog:Speicherverbrauch} zu finden.
+    nicht unbedingt präzise ist, stellt sich das Ergebnis als so aussagekräftig heraus, um einen Schluss ziehen zu können. Sollten viele Threads benötigt werden und der bereitgestellte Wert 
+    nicht in jedem Thread benötigt werden, stellt sich \texttt{ScopedValue} als wesentlich speichersparender heraus. Der Quelltext ist im Anhang in Programm \ref{prog:Speicherverbrauch} zu finden.
