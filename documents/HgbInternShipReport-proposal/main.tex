@@ -1,0 +1,69 @@
+%%% Dateikodierung: UTF-8
+%%% äöüÄÖÜß  <-- keine deutschen Umlaute hier? UTF-faehigen Editor verwenden!
+
+%%% Magic Comments zum Setzen der korrekten Parameter in kompatiblen IDEs
+% !TeX encoding = utf8
+% !TeX program = pdflatex 
+% !TeX spellcheck = de_DE
+% !BIB program = biber
+
+\RequirePackage[utf8]{inputenc} % bei Verw. von lualatex oder xelatex entfernen!
+\RequirePackage{hgbpdfa}        % Erzeugt ein PDF/A-2b-konformes Dokument
+
+\documentclass[bachelor,german,smartquotes,proposal,apa]{hgbthesis}
+% Zulässige Optionen in [..]: 
+%    Typ der Arbeit: 'diploma', 'master' (default), 'bachelor', 'internship'
+%		 Zusätzlich für ein Thesis-Exposé: 'proposal' (für 'bachelor' und 'master')
+%    Hauptsprache: 'german' (default), 'english'
+%    Option zur Umwandlung in typografische Anführungszeichen: 'smartquotes'
+%    APA Zitierstil: 'apa'
+%%%-----------------------------------------------------------------------------
+
+\graphicspath{{images/}}  % Verzeichnis mit Bildern und Grafiken
+\logofile{logo}           % Logo-Datei: images/logo.pdf (kein Logo: \logofile{})
+\bibliography{references} % Biblatex-Literaturdatei (references.bib)
+
+%%%-----------------------------------------------------------------------------
+\begin{document}
+%%%-----------------------------------------------------------------------------
+
+%%%-----------------------------------------------------------------------------
+% Angaben für die Titelei (Titelseite, Erklärung etc.)
+%%%-----------------------------------------------------------------------------
+
+\title{Virtuelle Threads und strukturierte Nebenläufigkeitssteuerung in Java}
+\author{Gernot Hofbauer}
+\programname{Software Engineering}
+
+\programtype{Fachhochschul-Bachelorstudiengang}
+%\programtype{Fachhochschul-Masterstudiengang} % auswählen/editieren
+
+\placeofstudy{Hagenberg}
+\dateofsubmission{2024}{09}{26} % {YYYY}{MM}{DD}
+
+\advisor{FH-Prof. DI Johann Heinzelreiter} % optional
+\includepdf[pages=-]{Titelblatt.pdf}
+
+%%%-----------------------------------------------------------------------------
+\frontmatter                                       % Titelei (röm. Seitenzahlen)
+%%%-----------------------------------------------------------------------------
+
+% \maketitle
+\tableofcontents
+
+%\include{front/kurzfassung}		
+%\include{front/abstract}			
+
+%%%-----------------------------------------------------------------------------
+\mainmatter                             % Hauptteil (ab hier arab. Seitenzahlen)
+%%%-----------------------------------------------------------------------------
+
+\include{chapters/expose}
+
+%%%-----------------------------------------------------------------------------
+% \MakeBibliography                                           % Quellenverzeichnis
+%%%-----------------------------------------------------------------------------
+
+%%%-----------------------------------------------------------------------------
+\end{document}
+%%%-----------------------------------------------------------------------------
