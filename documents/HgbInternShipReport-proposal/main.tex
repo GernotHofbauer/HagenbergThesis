@@ -10,7 +10,7 @@
 \RequirePackage[utf8]{inputenc} % bei Verw. von lualatex oder xelatex entfernen!
 \RequirePackage{hgbpdfa}        % Erzeugt ein PDF/A-2b-konformes Dokument
 
-\documentclass[bachelor,german,smartquotes,proposal,apa]{hgbthesis}
+\documentclass[bachelor,german,smartquotes,proposal,alphabetic]{hgbthesis}
 % Zulässige Optionen in [..]: 
 %    Typ der Arbeit: 'diploma', 'master' (default), 'bachelor', 'internship'
 %		 Zusätzlich für ein Thesis-Exposé: 'proposal' (für 'bachelor' und 'master')
@@ -19,9 +19,12 @@
 %    APA Zitierstil: 'apa'
 %%%-----------------------------------------------------------------------------
 
+
 \graphicspath{{images/}}  % Verzeichnis mit Bildern und Grafiken
 \logofile{logo}           % Logo-Datei: images/logo.pdf (kein Logo: \logofile{})
 \bibliography{references} % Biblatex-Literaturdatei (references.bib)
+\input{acronyms}                          % makeglossaries main in der cmd ausführen
+\makeglossaries                           % makeglossaries muss dadurch nicht mehr in der cmd ausgeführt werden   
 
 %%%-----------------------------------------------------------------------------
 \begin{document}
@@ -31,17 +34,18 @@
 % Angaben für die Titelei (Titelseite, Erklärung etc.)
 %%%-----------------------------------------------------------------------------
 
-\title{Virtuelle Threads und strukturierte Nebenläufigkeitssteuerung in Java}
-\author{Gernot Hofbauer}
-\programname{Software Engineering}
+% \title{Virtuelle Threads und strukturierte Nebenläufigkeitssteuerung in Java}
+% \author{Gernot Hofbauer}
+% \programname{Software Engineering}
 
-\programtype{Fachhochschul-Bachelorstudiengang}
-%\programtype{Fachhochschul-Masterstudiengang} % auswählen/editieren
+% \programtype{Fachhochschul-Bachelorstudiengang}
+% %\programtype{Fachhochschul-Masterstudiengang} % auswählen/editieren
 
-\placeofstudy{Hagenberg}
-\dateofsubmission{2024}{09}{26} % {YYYY}{MM}{DD}
+% \placeofstudy{Hagenberg}
+% \dateofsubmission{2024}{09}{26} % {YYYY}{MM}{DD}
 
-\advisor{FH-Prof. DI Johann Heinzelreiter} % optional
+% \advisor{FH-Prof. DI Johann Heinzelreiter} % optional
+\pagenumbering{alph}                    % damit die Titelseite mit 'a' beginnt und links wieder richtig funktionieren
 \includepdf[pages=-]{Titelblatt.pdf}
 
 %%%-----------------------------------------------------------------------------
@@ -50,9 +54,10 @@
 
 % \maketitle
 \tableofcontents
-
+\printglossary[type=\acronymtype,title=Akronyme]
 %\include{front/kurzfassung}		
 %\include{front/abstract}			
+
 
 %%%-----------------------------------------------------------------------------
 \mainmatter                             % Hauptteil (ab hier arab. Seitenzahlen)
@@ -61,9 +66,8 @@
 \include{chapters/expose}
 
 %%%-----------------------------------------------------------------------------
-% \MakeBibliography                                           % Quellenverzeichnis
+\MakeBibliography                                           % Quellenverzeichnis
 %%%-----------------------------------------------------------------------------
-
 %%%-----------------------------------------------------------------------------
 \end{document}
 %%%-----------------------------------------------------------------------------

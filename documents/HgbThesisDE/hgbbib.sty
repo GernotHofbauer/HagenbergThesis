@@ -15,6 +15,15 @@
 \DeclareOption{chicago}{\renewcommand{\@bibstyle}{chicago}}
 \DeclareOption{authoryear}{\renewcommand{\@bibstyle}{authoryear}}
 \DeclareOption{alphabetic}{\renewcommand{\@bibstyle}{alphabetic}}
+\DeclareOption{harvard}{\renewcommand{\@bibstyle}{authoryear-comp}}
+\DeclareOption{authoryearbrackets}{%
+  \renewcommand{\@bibstyle}{authoryear}%
+  \AtEndOfPackage{%
+    \DeclareFieldFormat{parens}{\mkbibbrackets{#1}}%
+    \renewcommand*{\nameyeardelim}{\addcomma\space}%
+  }%
+}
+
 \ProcessOptions\relax
 
 \RequirePackage{xifthen}
