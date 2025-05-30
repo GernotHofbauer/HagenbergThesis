@@ -10,7 +10,7 @@
 \RequirePackage[utf8]{inputenc} % bei Verw. von lualatex oder xelatex entfernen!
 \RequirePackage{hgbpdfa}        % Erzeugt ein PDF/A-2b-konformes Dokument
 
-\documentclass[internship,german,smartquotes]{hgbthesis}
+\documentclass[internship,german,smartquotes,alphabetic]{hgbthesis}
 % Zulässige Optionen in [..]: 
 %    Typ der Arbeit: 'diploma', 'master' (default), 'bachelor', 'internship'
 %		 Zusätzlich für ein Thesis-Exposé: 'proposal' (für 'bachelor' und 'master')
@@ -23,6 +23,9 @@
 \logofile{logo}           % Logo-Datei: images/logo.pdf (kein Logo: \logofile{})
 \bibliography{references} % Biblatex-Literaturdatei (references.bib)
 
+\input{acronyms}                          % makeglossaries main in der cmd ausführen
+\makeglossaries                           % makeglossaries muss dadurch nicht mehr in der cmd ausgeführt werden  
+
 %%%-----------------------------------------------------------------------------
 \begin{document}
 %%%-----------------------------------------------------------------------------
@@ -31,90 +34,65 @@
 % Angaben für die Titelei (Titelseite, Erklärung etc.)
 %%%-----------------------------------------------------------------------------
 
-\title{Endbericht zum Berufspraktikum bei Mogulovich International}
-\author{Alex A.\ Schlaumeier}
+% \title{Endbericht zum Berufspraktikum bei Mogulovich International}
+% \author{Alex A.\ Schlaumeier}
 
-\programtype{Fachhochschul-Bachelorstudiengang}
-\programname{Medientechnik und -design}
-\placeofstudy{Hagenberg}
+% \programtype{Fachhochschul-Bachelorstudiengang}
+% \programname{Medientechnik und -design}
+% \placeofstudy{Hagenberg}
 
-\dateofsubmission{2024}{06}{25}
-\advisor{Pjotr I.~Czar, M.A.}
-\companyName{%
-   Mogulovich International Media GmbH\\
-   Online Division\\
-   Hubertusgasse 3a, 1020 Wien
-}
-\companyUrl{www.mogul.at}
-
+% \dateofsubmission{2024}{06}{25}
+% \advisor{Pjotr I.~Czar, M.A.}
+% \companyName{%
+%    Mogulovich International Media GmbH\\
+%    Online Division\\
+%    Hubertusgasse 3a, 1020 Wien
+% }
+% \companyUrl{www.mogul.at}
+\pagenumbering{alph}                    % damit die Titelseite mit 'a' beginnt und links wieder richtig funktionieren
+% \includepdf[pages=-]{Titelblatt.pdf}
 %%%-----------------------------------------------------------------------------
 \frontmatter                                       % Titelei (röm. Seitenzahlen)
 %%%-----------------------------------------------------------------------------
 
-\maketitle
+% \maketitle
 \tableofcontents
+\printglossary[type=\acronymtype,title=Akronyme]
 
 %%%-----------------------------------------------------------------------------
 
-\chapter{Kurzfassung}
-
-Umfang der Kurzfassung: ca.\ 200 Worte.
-
-Zum allgemeinen Inhalt des Berichts: Dieser Bericht beschreibt den Ablauf des
-Praktikums, die Aufgaben und durchgeführten Projekte und Erfahrungen. Die
-eigenen Aktivitäten (Projekte) stehen dabei natürlich im Mittelpunkt und bilden
-den Hauptteil des Berichts. Wenn viele Kleinprojekte bearbeitet wurden, sollten
-einige davon exemplarisch genauer beschrieben werden. Neben der eigentlichen
-Arbeit sollten aber auch folgende weitere Aspekte berücksichtigt werden:
-%
-\begin{itemize}
-	\item Abläufe (Workflows) innerhalb des Unternehmens bzw.\ in Projekten
-	(grafische Darstellungen können dabei nützlich sein),
-	\item Arbeits- und Führungsstil, Kommunikation innerhalb des Unternehmens,
-	\item Kommunikation nach außen (Kund*innen, Partner*innen),
-	\item Zeitsituation, Terminprobleme,
-	\item Einbettung in das Team, soziale Erfahrungen,
-	\item Einsatz von speziellen Techniken, Methoden und Werkzeugen,
-	\item wichtige Herausforderungen oder Schwierigkeiten,
-	\item Anforderungen in Bezug auf die Ausbildung im Studium (gut
-	einsetzbare Kenntnisse, Defizite).
-\end{itemize}
-%
-Die nachfolgenden Kapitelüberschriften sollen nur zur Orientierung für die
-Struktur des Berichts dienen, über die konkrete Einteilung und den Wortlaut
-kann man natürlich selbst entscheiden.
+\include{chapters/Kurzfassung}
 
 %%%-----------------------------------------------------------------------------
 \mainmatter                             % Hauptteil (ab hier arab. Seitenzahlen)
 %%%-----------------------------------------------------------------------------
+\include{chapters/einleitung}
+% \chapter{Das Unternehmen}
 
-\chapter{Das Unternehmen}
+% Umfang: 1--2 Seiten
+% %%%-----------------------------------------------------------------------------
 
-Umfang: 1--2 Seiten
+% \chapter{Projekte und Tätigkeiten während des Praktikums}
 
-%%%-----------------------------------------------------------------------------
+% Umfang: 2--3 Seiten (Projektziel(e), Projektumfeld)
 
-\chapter{Projekte und Tätigkeiten während des Praktikums}
-
-Umfang: 2--3 Seiten (Projektziel(e), Projektumfeld)
-
-%%%-----------------------------------------------------------------------------
+% %%%-----------------------------------------------------------------------------
      
-\chapter{Projektbeispiele}
+% \chapter{Projektbeispiele}
 
-Umfang: 5--6 Seiten (Umsetzung, grober Terminplan, Ergebnisse,
-Qualitätssicherungsmaßnahmen)
+% Umfang: 5--6 Seiten (Umsetzung, grober Terminplan, Ergebnisse,
+% Qualitätssicherungsmaßnahmen)
 
-%%%-----------------------------------------------------------------------------
+% %%%-----------------------------------------------------------------------------
 
-\chapter{Erfahrungen und Zusammenfassung}
+% \chapter{Erfahrungen und Zusammenfassung}
 
-Umfang: 1--2 Seiten
+% Umfang: 1--2 Seiten
 
 %%%-----------------------------------------------------------------------------
 %\backmatter        % Schlussteil (nur bei Verwendung des Quellenverzeichnisses)
 %%%-----------------------------------------------------------------------------
 
-%\MakeBibliography % Quellenverzeichnis (sofern notwendig, sonst weglassen)
+\MakeBibliography % Quellenverzeichnis (sofern notwendig, sonst weglassen)
 
 \end{document}

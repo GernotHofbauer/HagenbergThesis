@@ -1,0 +1,44 @@
+\chapter{Einleitung}
+    Um den Abschluss des Fachhochschul-Bachelorstudiengangs Software Engineering an
+    der FH Hagenberg zu erlangen, muss im Rahmen des Studiums ein zwölfwöchiges Be-
+    rufspraktikum absolviert werden. Dieses Praktikum wird in der Regel im sechsten Se-
+    mester absolviert und erfordert die Zusammenarbeit mit einem von der FH geprüften
+    Unternehmen oder einer Einrichtung. Anschließend ist dazu ein Bericht abzugeben, der
+    die Tätigkeiten und Ergebnisse des Praktikums beschreibt. Der
+    Bericht ist vollkommen in deutscher Sprache verfasst.
+
+\section{Unternehmen und Arbeitsumfeld}
+
+    Das Praktikum wird bei \emph{ITPRO - Consulting \& Software GmbH} \cite{ITPRO} absolviert. Dabei handelt es sich um ein Unternehmen, das sich auf die Entwicklung von Softwarelösungen 
+    spezialisiert hat. Gegründet wurde es im Jahre 1999 und hat seinen Hauptsitz in Linz. Kleinere Büros befinden sich in Hagenberg und Ottensheim. Derzeit sind insgesamt um die 
+    50 Mitarbeiter*innen in den verschiedenen Büros beschäftigt. Diese können bis auf wenige Ausnahmen frei zwischen den Büros wechseln und dort arbeiten. Unter normalen Umständen sind 
+    um die 8 Mitarbeiter*innen  aus 2 verschiedenen Teams im hagenberger Standort anzutreffen.
+    Der Großteil des Praktikums wurde aus diesem Grund in Hagenberg absolviert.
+    ITPRO bietet Außendienst-Lösungen, Dienstleistungs-ERP, Lösungen für \gls{oepnv}-Unternehmen und individuelle Software-Lösungen an für die auch individuelle Hardware entwickelt
+    und ausgeliefert wird.
+
+    Das Praktikum sieht eine Stelle als Entwickler im internen Team \emph{"Team Nachtschicht"} vor. Der Name wurde von den Entwicklern gewählt und kann keinerlei tiefere Bedeutung zugeordnet werden.
+    Dieses besteht derzeit aus 11 Personen und ist für die Entwicklung 
+    von \gls{oepnv}-Lösungen zuständig. Als Vorgehensmodell des Projektmanagements wird Scrum verwendet. Die Technologien werden auf Absprache mit dem Kunden ausgewählt. Gibt es von deren Seite keine
+    Preferenz, so wird in in der Regel auf C\# und .NET zurückgegriffen.
+
+    Obwohl die Teilnahme an Scrum-Meetings verpflichtend war, wurden mit nur wenigen Ausnahmen ausschließlich mit 2 Mitarbeitern zusammengearbeitet. Dabei handelte es sich um Herrn Julian Gaisbauer 
+    (BSc), der die Rolle des Betreuers im Praktikum übernommen hat. Dieser war mit der Einarbeitung in die Projekte und die Unterstützung bei der Arbeit betraut. Außerdem stand er für 
+    Fragen und Probleme aller Art zur Verfügung. Die zweite Person war Herr Theodor Hartleitner (MSc), der einen Großteil der Aufgaben und Anforderungen definierte. Bei spezifischeren 
+    Fragen zu den Anforderungen und der Software stand er ebenfalls zur Verfügung. Mit den anderen Teammitgliedern wurde wenig Zusammenarbeit geleistet, da diese meist an anderen Projekten arbeiteten.
+
+
+\section{Übersicht über die Projekte}
+    Während der Zeit des Praktikums wurde an zwei Projekten gearbeitet. Beide Projekte sind im Bereich des \gls{oepnv} angesiedelt und sollten somit Verkehrsunternehmen die Verwaltung von ihrer Daten 
+    vereinfachen. Das Projekt \emph{"ITCS-Management"} sollte dabei die Visualisierung und Verwaltung von daten wie Fahrpläne und Fahrzeugen ermöglichen. Das zweite Projekt 
+    \emph{"ITCS"} sollte eine Schnittstelle zu anderen Systemen bieten sodass Daten aus anderen Systemen importiert und exportiert werden können. Weiters fungierte es als Bibliothek 
+    die von anderen Projekten verwendet werden kann um beispielsweise Datenvalidierung zu ermöglichen oder Datenbankobjekte automatisch zu generieren.
+
+\subsection{Das Projekt \emph{"ITCS-Management"}}
+    Das Projekt \emph{"ITCS-Management"} ist eine Webanwendung, die es ermöglicht, Daten wie Fahrpläne, Fahrzeuge und Haltestellen zu verwalten. Es wurde mit dem Ziel entwickelt, den 
+    Verwaltungsaufwand für Verkehrsunternehmen zu reduzieren und eine benutzerfreundliche Oberfläche zu bieten. Es wurde mit C\# und Blazor umgesetzt. Bei der Datenbank
+    handelt es sich um eine SQL-Server-Datenbank, die ein VDV-452~\cite{VDV452} konformes
+    Datenmodell österreichischer Verkehrsunternehmen abbildet. Gelegentlich musste dieses
+    Schema auch erweitert oder angepasst werden. Der Zugriff auf die Datenbank erfolgte durch das \gls{efc}. 
+    Das Projekt wurde nicht neu begonnen sondern sondern um neue Seiten und Funktionen erweitert.
+    Dabei handelte es eine Seite für die Verwaltung von 
