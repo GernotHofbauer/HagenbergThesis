@@ -1,0 +1,58 @@
+<mxfile host="65bd71144e">
+    <diagram id="UjwIs3UREq_Xr7HcM-xB" name="Page-1">
+        <mxGraphModel dx="1332" dy="907" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" background="none" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="3" value="Externes System&lt;div&gt;zum Erstellen von neuen Versionen&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="200.73000000000002" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="&quot;itcs-Datenbank&quot;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="299" y="200.73000000000002" width="122" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="System zur Verwaltung Anzeigetafeln" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="524" y="200.73000000000002" width="132" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="" style="image;html=1;image=img/lib/clip_art/computers/Database_128x128.png" parent="1" vertex="1">
+                    <mxGeometry x="120" y="118.5" width="80" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="" style="image;html=1;image=img/lib/clip_art/computers/Database_128x128.png" parent="1" vertex="1">
+                    <mxGeometry x="325.9" y="118.5" width="80" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="" style="image;html=1;image=img/lib/clip_art/computers/Workstation_128x128.png" parent="1" vertex="1">
+                    <mxGeometry x="325.9" y="348.5" width="80" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="" style="shape=doubleArrow;direction=south;whiteSpace=wrap;html=1;fillColor=#9999FF;" parent="1" vertex="1">
+                    <mxGeometry x="352" y="245.73" width="16" height="97" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="&quot;itcs-management&quot;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="368.5" width="80" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="Visualisiert und verändert Daten" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="368" y="279.23" width="87.9" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="" style="shape=doubleArrow;direction=south;whiteSpace=wrap;html=1;fillColor=#9999FF;rotation=-90;" parent="1" vertex="1">
+                    <mxGeometry x="255.90000000000003" y="110" width="16" height="97" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="" style="image;html=1;image=img/lib/clip_art/computers/Data_Filtering_128x128.png" parent="1" vertex="1">
+                    <mxGeometry x="465.9" y="110" width="36" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="" style="shape=doubleArrow;direction=south;whiteSpace=wrap;html=1;fillColor=#9999FF;rotation=-90;" parent="1" vertex="1">
+                    <mxGeometry x="475.90000000000003" y="110" width="16" height="97" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="Exportroutine filtert und bereitet Daten auf" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="425" y="170" width="106.1" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="" style="image;html=1;image=img/lib/clip_art/computers/Network_128x128.png" parent="1" vertex="1">
+                    <mxGeometry x="550" y="118.5" width="80" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="Exportroutine&lt;div&gt;generiert zusätzliche Entitäten&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="210.85" y="180" width="109.15" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="" style="shape=image;html=1;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;image=img/clipart/Gear_128x128.png" parent="1" vertex="1">
+                    <mxGeometry x="246" y="110" width="35.8" height="42" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

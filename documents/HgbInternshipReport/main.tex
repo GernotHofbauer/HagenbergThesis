@@ -24,7 +24,8 @@
 \bibliography{references} % Biblatex-Literaturdatei (references.bib)
 
 \input{acronyms}                          % makeglossaries main in der cmd ausführen
-\makeglossaries                           % makeglossaries muss dadurch nicht mehr in der cmd ausgeführt werden  
+% \makeglossaries                           % makeglossaries muss dadurch nicht mehr in der cmd ausgeführt werden  
+
 
 %%%-----------------------------------------------------------------------------
 \begin{document}
@@ -38,6 +39,7 @@
 % \author{Alex A.\ Schlaumeier}
 
 % \programtype{Fachhochschul-Bachelorstudiengang}
+
 % \programname{Medientechnik und -design}
 % \placeofstudy{Hagenberg}
 
@@ -61,12 +63,13 @@
 
 %%%-----------------------------------------------------------------------------
 
-\include{chapters/Kurzfassung}
+% \include{chapters/Kurzfassung}
 
 %%%-----------------------------------------------------------------------------
 \mainmatter                             % Hauptteil (ab hier arab. Seitenzahlen)
 %%%-----------------------------------------------------------------------------
 \include{chapters/einleitung}
+\include{chapters/design}
 % \chapter{Das Unternehmen}
 
 % Umfang: 1--2 Seiten
@@ -90,7 +93,7 @@
 % Umfang: 1--2 Seiten
 
 %%%-----------------------------------------------------------------------------
-%\backmatter        % Schlussteil (nur bei Verwendung des Quellenverzeichnisses)
+\backmatter        % Schlussteil (nur bei Verwendung des Quellenverzeichnisses)
 %%%-----------------------------------------------------------------------------
 
 \MakeBibliography % Quellenverzeichnis (sofern notwendig, sonst weglassen)

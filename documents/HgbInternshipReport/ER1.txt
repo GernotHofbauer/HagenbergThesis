@@ -1,0 +1,53 @@
+erDiagram
+
+    Route {
+        int VersionNr PK,FK
+        int RouteNr PK
+        nvarchar RouteVariant PK
+        nvarchar ControlCenterId PK,FK
+        int RouteType
+    }
+    
+    RoutePosition {
+        int VersionNr PK,FK
+        int RoutePositionNr PK
+        int RouteNr PK,FK
+        nvarchar RouteVariant PK,FK
+        nvarchar ControlCenterId PK,FK
+        int PlatformNr FK
+    }
+    
+    Platform {
+        int VersionNr PK,FK
+        int PlatformNr PK
+        nvarchar ControlCenterId PK,FK
+        decimal Longitude
+        decimal Latitude
+    }
+    
+    Ride {
+        int VersionNr PK,FK
+        bigint RideNr PK
+        nvarchar ControlCenterId PK,FK
+        int StartTimeInSeconds
+        int RouteNr FK
+        nvarchar RouteVariant FK
+        int TripNr
+    }
+    
+    Trip {
+        int VersionNr PK,FK
+        int TripNr PK
+        nvarchar ControlCenterId PK,FK
+        int StartPlatformNr
+        int DestinationPlatformNr
+    }
+
+
+    
+    Route ||--o{ RoutePosition : "besteht aus"
+    Route ||--o{ Ride : "wird befahren von"
+    
+    Platform ||--o{ RoutePosition : "wird verwendet von"
+    
+    Ride }o--|| Trip : "kann gehören zu"
