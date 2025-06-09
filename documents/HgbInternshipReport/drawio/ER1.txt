@@ -43,8 +43,6 @@ erDiagram
         int DestinationPlatformNr
     }
 
-
-    
     Route ||--o{ RoutePosition : "besteht aus"
     Route ||--o{ Ride : "wird befahren von"
     

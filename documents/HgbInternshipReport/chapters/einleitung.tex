@@ -1,8 +1,8 @@
-\chapter{Einleitung}\label{chap:einleitung}
+\chapter{Einleitung}
+\label{chap:einleitung}
     Um den Abschluss des Fachhochschul-Bachelorstudiengangs Software Engineering an
-    der FH Hagenberg zu erlangen, muss im Rahmen des Studiums ein zwölfwöchiges Be-
-    rufspraktikum absolviert werden. Dieses Praktikum wird in der Regel im sechsten Se-
-    mester absolviert und erfordert die Zusammenarbeit mit einem von der FH geprüften
+    der FH Hagenberg zu erlangen, muss im Rahmen des Studiums ein zwölfwöchiges Berufspraktikum absolviert werden. Dieses Praktikum wird in der Regel im sechsten
+     Semester absolviert und erfordert die Zusammenarbeit mit einem von der FH geprüften
     Unternehmen oder einer Einrichtung. Anschließend ist dazu ein Bericht abzugeben, der
     die Tätigkeiten und Ergebnisse des Praktikums beschreibt. Der
     Bericht ist vollkommen in deutscher Sprache verfasst.
@@ -19,7 +19,7 @@
     Das Praktikum sieht eine Stelle als Entwickler im internen Team \emph{"Team Nachtschicht"} vor. Der Name wurde von den Entwicklern gewählt und kann keinerlei tiefere Bedeutung zugeordnet werden.
     Dieses besteht derzeit aus 11 Personen und ist für die Entwicklung 
     von \gls{oepnv}-Lösungen zuständig. Als Vorgehensmodell des Projektmanagements wird Scrum verwendet. Die Technologien werden auf Absprache mit dem Kunden ausgewählt. Gibt es von deren Seite keine
-    Preferenz, so wird in in der Regel auf C\# und .NET zurückgegriffen.
+    Präferenz, so wird in der Regel auf C\# und .NET zurückgegriffen.
 
     Obwohl die Teilnahme an Scrum-Meetings verpflichtend war, wurden mit nur wenigen Ausnahmen ausschließlich mit 2 Mitarbeitern zusammengearbeitet. Dabei handelte es sich um Herrn Julian Gaisbauer 
     (BSc), der die Rolle des Betreuers im Praktikum übernommen hat. Dieser war mit der Einarbeitung in die Projekte und die Unterstützung bei der Arbeit betraut. Außerdem stand er für 
@@ -29,7 +29,7 @@
 
 \section{Übersicht über die Projekte}\label{sec:ueberblick-projekte}
     Während der Zeit des Praktikums wurde an zwei Projekten gearbeitet. Beide Projekte sind im Bereich des \gls{oepnv} angesiedelt und sollten somit Verkehrsunternehmen die Verwaltung von ihrer Daten 
-    vereinfachen. Das Projekt \emph{"ITCS-Management"} sollte dabei die Visualisierung und Verwaltung von daten wie Fahrpläne und Fahrzeugen ermöglichen. Das zweite Projekt 
+    vereinfachen. Das Projekt \emph{"ITCS-Management"} sollte dabei die Visualisierung und Verwaltung von Daten wie Fahrpläne und Fahrzeugen ermöglichen. Das zweite Projekt 
     \emph{"ITCS"} sollte eine Schnittstelle zu anderen Systemen bieten, sodass Daten aus anderen Systemen importiert und exportiert werden können. Weiters fungierte es als Bibliothek 
     die von anderen Projekten verwendet werden kann, um beispielsweise Datenvalidierung zu ermöglichen oder Datenbankobjekte automatisch zu generieren.
 
@@ -61,7 +61,7 @@
     von Datenbankobjekten oder Strecken- und Zeitberechnungen ermöglichen. Diese Teile wurden auch im Projekt \emph{"ITCS-Management"} verwendet.
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.95\textwidth]{overview.png}
+        \includegraphics[width=0.9\textwidth]{overview_alt.png}
         \caption{Übersicht über die Projekte}
         \label{fig:VTs}
     \end{figure}
@@ -70,7 +70,7 @@
 
     Das Praktikum wurde nicht, wie oft üblich, als eigenes Projekt durchgeführt, sondern als
     Unterstützung für andere größere Projekte, an dem das Team schon länger arbeitete. Somit wurden die Aufgabenstellungen in Form von Tasks vom Product Owner und dem Betreuer definiert 
-    und dem Praktikanten zugewiesen. Diese Aufgaben waren auch anfangs nicht vollständig festgelegt, sondern wurden erst bei Bedarf im Detail definiert. Somit waren dem Praktikanten zu Beginn
+    und dem Praktikanten zugewiesen. Diese Aufgaben waren auch anfangs nicht vollständig festgelegt, sondern wurden erst bei Bedarf im Detail definiert. Dadurch waren dem Praktikanten zu Beginn
     nur die unmittelbaren Aufgaben bekannt, die in den Meetings mit dem Product Owner besprochen wurden.
     Die ersten Aufgaben wiesen nur wenige Zusammenhänge untereinander auf, da diese meist nur wenig Aufwand darstellten und nur wenige Stunden in Anspruch nahmen. 
     Kontakt mit Kunden oder anderen Personen außerhalb des Unternehmens waren nicht Teil des Praktikums und auch die Teilnahme an Team-Meeting war bis auf die Daily-Meetings nicht vorgesehen.
@@ -81,16 +81,17 @@
     Endkunden die Möglichkeit gegeben werden, Leerfahrten und Pausen automatisch zu generieren, um die Umläufe zu vervollständigen und räumliche Konflikte zu vermeiden. Die Zuordnung 
     von Fahrten zu Umläufen sollte über Drag \& Drop möglich sein und die Validierung sollte, wenn möglich, in Echtzeit erfolgen. Um dies zu ermöglichen, muss bei der Erstellung von Leerfahrten die zu 
     zurückzulegende Strecke und Fahrtdauer ebenfalls in Echtzeit ermittelt werden.
-    Das Konzept des visuellen Designs wurde als Anhaltspunkt über die Design-Platform "Figma"~\cite{figma} bereitgestellt. Dieses wurde in Absprache mit dem Betreuer und dem 
+    Das Konzept des visuellen Designs wurde als Anhaltspunkt über die Design-Plattform "Figma"~\cite{figma} bereitgestellt. Dieses wurde in Absprache mit dem Betreuer und dem 
     Product Owner im Laufe der Entwicklung
     angepasst und erweitert. Die Implementierung der Seiten musste mit in Blazor, einem Web-UI-Framework von Microsoft, das es ermöglicht, interaktive Webanwendungen mit C\# zu erstellen, erfolgen.
     
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.8\textwidth]{Umlaufeditor_konzept.png}
+        \includegraphics[width=0.95\textwidth]{Umlaufeditor_konzept.png}
         \caption{Erstes Konzept des Umlaufeditors in Figma}
         \label{fig:Umlaufeditor_konzept}
     \end{figure}
 
-    In der Abbildung~\ref{fig:Umlaufeditor_konzept} ist das erste Konzept des Umlaufeditors zu sehen. Dabei sollten einzelne Fahrten mit der Maus von der rechten Seite in die Umläufe auf der linken Seite
-    gezogen werden können.
+    In Abbildung~\ref{fig:Umlaufeditor_konzept} ist das erste Konzept des Umlaufeditors zu sehen. Dabei sollten einzelne Fahrten mit der Maus von der rechten Seite in die Umläufe auf der linken Seite
+    gezogen werden können. Die Kettensymbole markieren Durchbindungen zwischen den Fahrten, die es erzwingen, dass die eine Fahrt direkt in die nächste übergeht. Sollte eine solche 
+    Fahrt einem Umlauf zugeordnet werden, so wird die gesamte Kette in den Umlauf übernommen.

@@ -1,3 +1,6 @@
 Blazor
 ITCS
 sFGM
+itcs-Management
+BSc
+MSc
