@@ -1,11 +1,11 @@
 \chapter{Design}\label{chap:design}
 
     Da wie bereits erwähnt, die Projekte \emph{"ITCS-Management"} und \emph{"ITCS"} bereits existierten, waren das grundlegende Design und die technische Architektur bereits vorgegeben.
-    Dies umfasst Aspekte wie die Transaktionsverwaltung der Datenbank als auch Elemente im Frontend wie die Navigation zwischen den Seiten oder die Farbpalette.
+    Dies umfasst Aspekte wie die Transaktionsverwaltung der Datenbank als auch Elemente im Frontend, wie die Navigation zwischen den Seiten oder die Farbpalette.
 
-\section{"itcs-Management"}\label{sec:itcs-management-design}
-    Im Projekt \emph{"itcs-Management"} wurde eine Vielzahl an kleineren Aufgaben erledigt. Dabei handelte es sich um Blazor-Seiten die meist nur Datenbank-Entitäten tabellarisch
-    darstellen und beschränktes Editieren ermöglichen sollten. Im Bericht selbst wird auf diese Aufgaben, aufgrund ihrer repetitiven Natur nicht weiter eingegangen. Konzentriert wird sich 
+\section{"ITCS-Management"}\label{sec:itcs-management-design}
+    Im Projekt \emph{"ITCS-Management"} wurde eine Vielzahl an kleineren Aufgaben erledigt. Dabei handelte es sich um Blazor-Seiten, die meist nur Datenbank-Entitäten tabellarisch
+    darstellen und beschränktes Editieren ermöglichen sollten. Im Bericht selbst wird auf diese Aufgaben, aufgrund ihrer repetitiven Natur, nicht weiter eingegangen. Fokussiert wird  
     auf die größte Aufgabe in diesem Projekt namens \emph{"Umlaufeditor"}. 
     Ein Umlauf stellt dabei eine Sequenz von Fahrten dar, die von einem einzelnen Fahrzeug in einem Durchgang durchgeführt wird. Die Fahrten werden von den meisten Kunden in anderen 
     Systemen erstellt und sind mit dem Import neuer Versionen in der Datenbank schon vorhanden. Die Umläufe hingegen werden nicht in anderen Systemen definiert und sollen deswegen
@@ -19,7 +19,7 @@
 
     Abbildung \ref{fig:BeziehungenvonUmläufenundFahrten} soll einen groben Überblick über das unmittelbar für diese Aufgabe benötigte Datenschema verschaffen. Für das Verständnis unwesentliche 
     Datenkomponenten und Beziehungen wurden weglassen. Die Entität "Route" ist in diesem Modell deswegen wichtig, da die Datenkomponente "RouteNr" die Art der Fahrt festlegt. Für Pausen oder nicht produktiven
-    Fahrten wird eine eigene Nummer vergeben. Zusätzlich ist bei jedem Umlauf ebenfalls jeweils eine Platform-Entität (auch "Steig") als Start- und Endpunkt eingetragen. Dabei kann es sich bei den 
+    Fahrten wird eine eigene Nummer vergeben. Zusätzlich ist bei jedem Umlauf ebenfalls jeweils eine Plattform-Entität (auch "Steig") als Start- und Endpunkt eingetragen. Dabei kann es sich bei den 
     Steigen um Sonderhaltepunkte wie beispielsweise Betriebshöfe handeln.
 
     Der Umlaufeditor besteht aus folgenden 3 Blazor-Seiten: 
@@ -32,11 +32,16 @@
                 deaktiviert oder gelöscht werden.
     \end{itemize}
 
-    % \begin{figure}[H]
-    %     \centering
-    %     \includegraphics[width=0.8\textwidth]{Ablauf.png}
-    %     \caption{Beziehungen von Umläufen und Fahrten}
-    %     \label{fig:Ablauf}
-    % \end{figure}
+    Es sind zwar alle drei Seiten für den Einsatz des Umlaufeditors notwendig, jedoch verbirgt sich hinter der Seite \emph{Umläufe} die meiste Logik und stellt beim laufenden Betrieb das Herzstück dar.
+    Der Prototyp der visuellen Grundstruktur der Seite ist in Abbildung \ref{fig:Umlaufeditor_konzept} zu sehen. Um die Seite jedoch implementieren zu können musste jedoch zunächst ein Konzept für den Ablauf 
+    des Hinzufügens von Fahrten zu Umläufen erstellt werden. Das Ergebnis kann in vereinfachter Form als Ablaufdiagramms in Abbildung \ref{fig:Ablauf} gesehen werden.
+
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{Ablauf.png}
+        \caption{Beziehungen von Umläufen und Fahrten}
+        \label{fig:Ablauf}
+    \end{figure}
 
 
