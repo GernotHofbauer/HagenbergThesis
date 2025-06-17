@@ -1,0 +1,48 @@
+\chapter{Testen}\label{chap:testen}
+    Das Testen des im Rahmen des Praktikums erstellten Codes war nicht Schwerpunkt der Arbeit des Praktikanten. Meistens wurden deswegen vor allem im Projekt \emph{"ITCS-Management"} nur 
+    manuelle Integrationstests über das UI durchgeführt. Bei Bedarf wurden auch Sql-Statements direkt in der Datenbank ausgeführt, um die Korrektheit der Daten zu überprüfen. 
+    Weitere Tests wurden von anderen  Mitarbeiter der Firma durchgeführt ohne direkte Beteiligung des Praktikanten. Sollten 
+    Fehler aufgetreten sein, wurden diese in einem Bug-Tracker dokumentiert und vom Praktikanten später behoben.
+
+    Bei zwei verschiedenen Aufgaben im Projek \emph{"ITCS"} wurden jedoch explizit automatisierte Tests geachtet durch den Praktikanten gefordert.
+    Diese wurden mit der \emph{xUnit}-Bibliothek~\cite{xunit}, einer weit verbreiteten Testbibliothek für .NET-Anwendungen erstellt.
+    Für das Mocken von Datenbankzugriffen wurde die \emph{Moq}-Bibliothek~\cite{moq} verwendet. Diese ermöglicht es, Objekte zu erstellen, die das Verhalten von Abhängigkeiten simulieren.
+    Einerseits wurde dabei Unit-Tests für eine Methode erstellt die für Fahrten neue \texttt{CourseNr}-Werte generiert. Diese Werte sind zwar nicht Teil des Primärschlüssels, sind jedoch 
+    für weitere Verwendung der Daten auf anderen Systemen wichtig und müssen aus diesem Grund eindeutig sein und eine bestimmte Struktur aufweisen. 
+
+    \begin{program} [H]
+        \caption{Beispiel eines Unit-Tests für die Generierung von CourseNr-Werten}
+        \label{prog:UnitTest}
+    \begin{CsCode}[numbers=left]
+[Fact]
+public void GenerateCourseNrIgnoresOutOfRangeValuesWhenGeneratingNextNumber()
+{
+    Mock<ITCSDatabaseManager> dbMock = new("conn", 30) { CallBase = true };
+    dbMock.Setup(m => m.GetControlCenterConfiguration("cc1"))
+        .Returns(new ControlCenterConfiguration { CourseNoLength = 3 });
+    dbMock.Setup(m => m.GetCurrentAndFutureVersions("cc1"))
+        .Returns(new List<VersionValidity> { new() { VersionNr = 1 } });
+
+    dbMock.Setup(m => m.GetRidesByRoute("cc1", 1, 9999, null))
+        .Returns(new List<Ride> {
+            new() { CourseNr = 9999005 },
+            new() { CourseNr = 9999950 },
+            new() { CourseNr = 9999003 }
+        });
+
+    TestEntityGenerator generator = new(dbMock.Object);
+    int result = generator.PublicGenerateCourseNr("cc1", 9999);
+    Assert.Equal(result, Is.EqualTo(9999006));
+}\end{CsCode}
+    \end{program}
+
+    In Programm~\ref{prog:UnitTest} ist ein Beispiel eines Unit-Tests für die Generierung von CourseNr-Werten zu sehen. 
+    Anfangs wird ein Mock-Objekt für die Datenbank erstellt, das die Abhängigkeit von der echten Datenbank simuliert. Dabei wird für 
+    einzelne Methodenaufrufe das erwartete Verhalten festgelegt. Anschließend wird die zu testende Methode aufgerufen und das Ergebnis überprüft.
+
+    Die weiteren mit Tests versehen Methoden, generieren oder verändern Daten in der Datenbank, sollten bestimmte Objekte wie Betriebshöfe Sonderhaltepunkte in die
+    Datenbank eingefügt oder modifiziert werden. Da sie für den Datenbankzugriff auf sehr viele eigens dafür erstellte Sql-Statements zurückgreifen, wurden sie in Integrationstests 
+    mit direkten Abhängigkeiten zu einer Test-Datenbank getestet. Benutzt wurde dafür eine Firmeneigene Test-Datenbank, die regelmäßig mit den aktuellen Daten der Produktionsdatenbank gefüllt wird.
+    Die Tests wurden aber dennoch so gestalten, dass sie nur an das Datenschema gebunden sind und nicht an die konkreten Daten.
+    Es wurde ebenfalls \emph{xUnit} verwendet und die Tests ähneln dem Beispiel in Programm \ref{prog:UnitTest}, nur dass hier die Datenbankabfragen nicht gemockt, sondern 
+    direkt ausgeführt werden und alle erstellten Objekte abgespeichert und anschließend wieder gelöscht werden, um die Test-Datenbank nicht zu verändern.

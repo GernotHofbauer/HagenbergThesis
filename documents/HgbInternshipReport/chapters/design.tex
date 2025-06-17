@@ -34,8 +34,7 @@
 
     Es sind zwar alle drei Seiten für den Einsatz des Umlaufeditors notwendig, jedoch verbirgt sich hinter der Seite \emph{Umläufe} die meiste Logik und stellt beim laufenden Betrieb das Herzstück dar.
     Der Prototyp der visuellen Grundstruktur der Seite ist in Abbildung \ref{fig:Umlaufeditor_konzept} zu sehen. Um die Seite jedoch implementieren zu können musste jedoch zunächst ein Konzept für den Ablauf 
-    des Hinzufügens von Fahrten zu Umläufen erstellt werden. Das Ergebnis kann in vereinfachter Form als Ablaufdiagramms in Abbildung \ref{fig:Ablauf} gesehen werden.
-
+    des Hinzufügens von Fahrten zu Umläufen erstellt werden. Das Ergebnis ist in vereinfachter Form als Ablaufdiagramms in Abbildung \ref{fig:Ablauf} zu sehen.
 
     \begin{figure}[H]
         \centering
@@ -44,4 +43,30 @@
         \label{fig:Ablauf}
     \end{figure}
 
+     
+\section{"ITCS"}\label{sec:itcs-design}
+    Das Projekt \emph{"ITCS"} beinhaltet die SQL-Scripts die alle Änderungen an der Datenbank dokumentierten, um das Schema auf einer neuen Datenbank reproduzieren zu können. 
+    Jedem dieser Scripte wird eine aufsteigende Versionsnummer zugeordnet. Diese Versionsnummer wird beim Aufruf des Scripts in eine eigene Datenbanktabelle eingetragen, um den Stand des Schemas
+    eindeutig zu dokumentieren. Im Zuge des Praktikums wurde das Datenbank-Schema um einige neuen Tabellen erweitert und bestehende Tabellen um neue Spalten ergänzt. Das Resultierte in
+    einige kleinere Create- und Alter-Scripten. Beispiele dafür sind die Erstellung einer neuen Tabelle für Sonderhaltepunkte oder das Einführen einer neuen Spalte bei Mandanten 
+    die abspeichert welche Arten von Sonderfahrten für diese generiert werden sollen.
 
+    Wie bereits erwähnt, liegt der Fokus des Projekts eigentlich auf den Import- und Export-Routinen. Diese werden dafür verwendet, um Daten aus anderen Datenbanken oder Dateien mit dem 
+    \emph{VDV-452}~\cite{VDV452} konformen \emph{"x10"}-Format in die ITCS-Datenbank zu importieren. Meist umfasst der Datentransfer eine neue Version des Fahrplans.
+    Dieses Projekt nutzt jedoch nicht das \gls{efc} für den Zugriff auf Datenbanken, sondern verwendet die \emph{System.Data.SqlClient}-Bibliothek.
+    Diese ist eine .NET-Bibliothek, die es ermöglicht, SQL-Server-Datenbanken zu verwalten 
+    und zu manipulieren. Mithilfe dieser wurden ein eigener Datenbaken-Manager und ein Attributbasiertes "Object-Relational Mapping" implementiert. Da alle Klassen dadurch von den 
+    Basis-Klassen \texttt{Entity} und \texttt{VersionedEntity} erben, ist dieses Vorgehen eher restriktiv, jedoch auf den spezifischen Anwendungsfall optimiert.
+    
+    Die Routinen für den Import und Export lesen dann Daten aus einer Quelle, speichern diese im Arbeitsspeicher zwischen und schreiben sie dann entweder in eine Datenbank oder in eine Datei.
+    Oftmals müssen die Daten dabei angepasst werden, da Quelle und Ziel unterschiedliche Datenschemen verwenden. 
+
+    Der Datenbank-Zugriff und die Routinen wurden jedoch schon vor dem Praktikum implementiert und daher nur noch geringfügig angepasst werden, wenn neue Tabellen oder Spalten hinzugefügt wurden.
+    Die Anpassungen beschränkten sich dabei auf das Hinzufügen von neuen Methoden im Datenbank-Manager und neuer Domain-Model-Klassen, die die neuen Tabellen repräsentieren.
+    
+    Im Praktikum wurde dieses Projekt hauptsächlich dafür verwendet, um Methoden, von denen die Logik in anderen Projekten wiederverwendet, werden können sollte, zu implementieren. 
+    Dies umfasst beispielsweise die Generierung von Daten wie Metadaten für Sonderfahrten. Wenn die Koordinaten der Sonderhaltepunkte für die neu generierte Sonderfahrt definiert wurden,
+    sollte ein \emph{HTTP}-Request an eine externe API gesendet werden, um berechnete Strecke inklusive Fahrtbeschreibung in Form von Wendepunkten zu erhalten. Diese 
+    Informationen wird dann aus der \emph{JSON}-Response extrahiert und in der Datenbank gespeichert. Fahrtzeit und -länge werden 
+    später für die Ermittlung von Konflikten zwischen Fahrten in Umläufen benötigt. Die Streckenbeschreibung wird für eine 
+    visuelle Darstellung der Fahrt benötigt. Diese ist aber nicht mehr Teil des Praktikums.
