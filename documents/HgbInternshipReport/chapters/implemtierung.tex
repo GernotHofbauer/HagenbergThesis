@@ -1,0 +1,19 @@
+\chapter{Implementierung}\label{ch:Implementierung}
+\section{Implementierung "ITCS-Management"}\label{sec:ImplementierungITCS-Management}
+    Die Benutzeroberflächen der \emph{ITCS-Management}-Anwendung wurden wie bereits erwähnnt mit Blazor implementiert. Dabei werden pro Seite 
+    zwei Dateien angelegt. Eine \texttt{.razor}-Datei, die das Layout der Seite über eine XML-ähnliche Syntax definiert
+    und eine \texttt{razor.cs}-Datei, die als \texttt{partial} markiert werden muss und alle benötigten Methoden und Logik hinter der Seite enthält. Manchmal ist die Verwendung einer \texttt{razor.css}-Datei 
+    auch sinnvoll, um die Seite zu stylen. Die Logic und die Css-klassen könnten zwar auch inder der \texttt{.razor}-Datei definiert werden,
+    aber das würde die Übersichtlichkeit stark verringern. 
+    
+    Der Datenbankzugriff erfolgt über mehrere Schichten. \emph{Repositories} sind dafür zuständig, 
+    die Daten aus der Datenbank zu laden und zu speichern. Sie führen normalerweise nur grundlegende Interaktionen mit der Datenbank über den Datenbank-Kontext des \gls{efc} aus.
+    Diese \emph{Repositories} werden dann von den \emph{Services} verwendet, die die Logik der Anwendung enthalten. Ein großer 
+    Vorteil der Verwendung von Blazor im Vergleich zu anderen Frontend-Technologien wie Angular oder React ist, dass die gesamte Logik der Anwendung in
+    C\# geschrieben werden kann. Dadurch werden sind keine HTTP-Endpoints benötigt da auf die Daten des Teilprojekts für den Datenbankzugriff direkt zugegriffen werden kann.
+    Die Services und Repositories wurden dann in der \texttt{Program.cs}-Datei der Anwendung für die Dependency-Injection registriert,
+    damit sie in den Blazor-Komponenten verwendet werden können.
+
+    Für die Darstellung der Daten im Frontend wurde auf UI-Komponentenbibliothek \emph{Radzen Blazor}~\cite{radzen} zurückgegriffen. 
+    Diese Bibliothek bietet eine Vielzahl an vorgefertigten Komponenten, die das Erstellen von Benutzeroberflächen erleichtern.
+    
