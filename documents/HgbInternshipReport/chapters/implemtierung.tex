@@ -17,3 +17,139 @@
     Für die Darstellung der Daten im Frontend wurde auf UI-Komponentenbibliothek \emph{Radzen Blazor}~\cite{radzen} zurückgegriffen. 
     Diese Bibliothek bietet eine Vielzahl an vorgefertigten Komponenten, die das Erstellen von Benutzeroberflächen erleichtern.
     
+    \begin{program} [H]
+        \caption{Ermittlung der zu generierenden Fahrten}
+        \label{prog:RideGeneration}
+    \begin{CsCode}[numbers=left]
+RideViewItem pRide = null;
+foreach (RideViewItem cRide in sortedRides)
+{
+    if (pRide is null){ pRide = cRide; continue; }
+
+    int previousEndTime = pRide.StartTimeInSeconds + pRide.DriveTimeInSeconds;
+    int timeBetweenRides = cRide.StartTimeInSeconds - previousEndTime;
+
+    if (!IsSpecialStopPoint(pRide.DestinationLocationTypeNr) &&
+        !IsSpecialStopPoint(cRide.StartLocationTypeNr))
+    {
+        bool isSameLocation = AreLocationsEqual(
+            pRide.DestinationLocationNr, pRide.DestinationLocationTypeNr,
+            cRide.StartLocationNr, cRide.StartLocationTypeNr);
+
+        if (!isSameLocation && this.generateNonProductiveRides)
+        {
+            RideViewItem existingEmptyRide = existingGeneratedRides
+                .FirstOrDefault(r => r.RouteNr == 9999 &&
+                    r.StartLocationNr == pRide.DestinationLocationNr &&
+                    r.StartLocationTypeNr == pRide.DestinationLocationTypeNr &&
+                    r.DestinationLocationNr == cRide.StartLocationNr &&
+                    r.DestinationLocationTypeNr == cRide.StartLocationTypeNr);
+
+            if (existingEmptyRide is not null)
+            {
+                neededRides.Add(existingEmptyRide.RideNr);
+                int newStartTime = pRide.StartTimeInSeconds + 
+                    pRide.DriveTimeInSeconds + pRide.RideStopTimeInSeconds;
+                if (existingEmptyRide.StartTimeInSeconds != newStartTime)
+                    await this.UpdateRideStartTime(existingEmptyRide, newStartTime);
+            }
+            else
+                await this.GenerateForEmptyRide(pRide, cRide, generator, trip);
+        }
+        else if (isSameLocation && timeBetweenRides > minimumBreakTime && 
+                    this.generateBreaks &&
+                    IsNoSpecialRide(pRide) && !IsConnectThrough(pRide, cRide))
+        {
+            RideViewItem existingBreak = existingGeneratedRides
+                .FirstOrDefault(r => r.RouteNr == 9989 &&
+                    r.StartLocationNr == pRide.DestinationLocationNr &&
+                    r.StartLocationTypeNr == pRide.DestinationLocationTypeNr);
+
+            if (existingBreak is not null)
+            {
+                neededRides.Add(existingBreak.RideNr);
+                int newStartTime = pRide.StartTimeInSeconds + 
+                    pRide.DriveTimeInSeconds + pRide.RideStopTimeInSeconds;
+                if (existingBreak.StartTimeInSeconds != newStartTime)
+                    await this.UpdateRideStartTime(existingBreak, newStartTime);
+            }
+            else
+                await this.GenerateBreak(pRide, trip, generator);
+        }
+    }
+}\end{CsCode} \end{program}
+
+    In Programm~\ref{prog:RideGeneration} ist ein Ausschnitt der Methode zu sehen, die für die Ermittlung der zu generierenden Fahrten zuständig ist. Um genauer zu sein,
+    handelt es sich um den Teil der die zu generierenden Leerfahrten und Pausen ermittelt. Zunächst werden dafür allen Fahrten in dem Umlauf nach ihrer Startzeit sortiert.
+    Anschließend wird in einer Schleife über alle sortierten Fahrten iteriert wobei jede Fahrt gemeinsam mit der vorherigen betrachtet wird. Sind der Zielpunkt der vorherigen Fahrt
+    und der Startpunkt der aktuellen Fahrt nicht gleich, wird eine Leerfahrt benötigt. Um unnötige Generierungen zu vermeiden, wird zunächst geprüft, ob eine Leerfahrt bereits existiert.
+    Sollte dies der Fall sein, wird diese Fahrt in die Liste der benötigten Fahrten aufgenommen und die Startzeit der Leerfahrt aktualisiert, falls sie sich geändert hat.
+    Sind der Zielpunkt der vorherigen Fahrt und der Startpunkt der aktuellen Fahrt gleich, wird geprüft, ob eine Pause generiert werden soll. Solche Sonderfahrten werden nur generiert, wenn
+    der Kunde dies explizit in den Einstellungen aktiviert hat und wenn es sich bei beiden Fahrten nicht um Sonderfahrten handelt. Sollte es um Anschlussfahrten gehen,
+    werden ebenfalls keine Pausen generiert.
+
+\section{Implementierung "ITCS"}\label{sec:ImplementierungITCS}
+    
+    Das Projekt \emph{ITCS} wurde um die Klasse \texttt{EntityGenerator} erweitert. Diese Klasse wird mit einem Datenbank-Connetion-String initialisiert 
+    und kann dann verwendet werden, um Daten in die Datenbank zu generieren. Für manche Operationen wurde auf den bereits erwähnten Datenbank-Manager zurückgegriffen. 
+    Die Transaktionsverwaltung wurde aber für jede Methode selbst implementiert, da der Datenbank-Manager nicht für alle Operationen geeignet ist. Oftmals 
+    wurden Operationen direkt als SQL-Statements ausgeführt. 
+    Die Methoden von \texttt{EntityGenerator} sollten als Bibliothek in anderen Projekten verwendet werden können.
+    \begin{program} [H]
+        \caption{Ermittlung der zu generierenden Fahrten}
+        \label{prog:RideGeneration}
+    \begin{CsCode}[numbers=left]
+public virtual int GenerateCourseNr(string ccid, int routeNr)
+{
+    if (string.IsNullOrEmpty(ccid))
+        throw new ArgumentException("ControlCenterId darf nicht leer sein.",
+             nameof(ccid));
+
+    using ITCSDatabaseManager itcsDbManager = new(this.connectionString, 
+        this.commandTimeout);
+    var config = itcsDbManager.GetControlCenterConfiguration(ccid) ??
+        throw new ArgumentException(
+            $"Keine Konfiguration für '{ccid}' gefunden.", nameof(ccid));
+
+    int courseNoLength = config.CourseNoLength > 0 ? config.CourseNoLength : 3;
+
+    int maxCourseValue = 899;
+    if (courseNoLength > 0)
+        maxCourseValue = (int)Math.Pow(10, courseNoLength) - 101;
+
+    List<VersionValidity> versions = 
+        itcsDbManager.GetCurrentAndFutureVersions(ccid);
+    if (versions.Count == 0)
+        throw new InvalidOperationException(
+            "Es wurden keine aktuellen oder zukünftigen Versionen gefunden.");
+
+    int highestCourseNr = 0;
+    int currentPrefix = routeNr;
+    bool found = false;
+    while (!found && currentPrefix >= routeNr - 10)
+    {
+        int internalHighestCourseNr = 0;
+        foreach (VersionValidity version in versions)
+        {
+            IList<Ride> rides = itcsDbManager.GetRidesByRoute(ccid,
+                version.VersionNr, currentPrefix, null);
+
+            foreach (Ride ride in rides)
+                if (ride.CourseNr > highestCourseNr && 
+                    ride.CourseNr % currentPrefix <= maxCourseValue)
+                    internalHighestCourseNr = ride.CourseNr;
+        }
+        if (internalHighestCourseNr % currentPrefix < maxCourseValue)
+        {
+            highestCourseNr = internalHighestCourseNr;
+            found = true;
+            break;
+        }
+        currentPrefix--;
+    }
+    if (!found)
+        throw new InvalidOperationException("keine gültige Kursnummer gefunden.");
+
+    return (currentPrefix * (int)Math.Pow(10, courseNoLength)) + 
+        ((highestCourseNr + 1) % currentPrefix);
+}\end{CsCode} \end{program}
