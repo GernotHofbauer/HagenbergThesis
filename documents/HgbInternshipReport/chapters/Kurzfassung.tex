@@ -1,12 +1,26 @@
 \chapter{Kurzfassung}% Umfang der Kurzfassung: ca.\ 200 Worte.
-Dieser Praktikumsbericht beschreibt die Arbeit des Praktikanten im Rahmen seines Praktikums bei der Firma ITCS GmbH. Der Schwerpunkt lag auf der Entwicklung
+Dieser Praktikumsbericht beschreibt die Arbeit des Praktikanten im Rahmen seines Praktikums bei der Firma ITPRO. Der Schwerpunkt lag auf der Entwicklung
 von Software für das ITCS-Management-System, das in der öffentlichen Verkehrsinfrastruktur eingesetzt wird. Das Herzstück dieser Software ist eine Webanwendung,
 die es ermöglicht, Umläufe aus einzelnen Fahrten zu erstellen. Dabei sollten verschiedene benötigte Daten auf der darunterliegenden Datenbank generiert werden.
 Außerdem sollten diese Umläufe auch automatisch auf Durchführbarkeit geprüft werden.
-In diesem Praktikum wurde mit der Programmiersprache \emph{C\#} und dem \emph{.NET}-Framework gearbeitet. Der Datenbankzugriff erfolgte über die \emph{Entity Framework Core}-Bibliothek, 
+In diesem Praktikum wurde mit der Programmiersprache \emph{C\#} und dem \emph{.NET}-Framework gearbeitet. Der Datenbankzugriff erfolgte über die
+\emph{Entity Framework Core}-Bibliothek, 
 die eine objektorientierte Abstraktionsebene für den Datenbankzugriff bereitstellt. Das Frontend wurde mit \emph{Blazor} entwickelt, einer modernen Webtechnologie, 
 die es ermöglicht, interaktive Webanwendungen mit C\# zu erstellen. Durch die Verwendung von \emph{Blazor} konnte eine nahtlose Integration zwischen Frontend und Backend erreicht werden,
 was die Entwicklung effizienter und flexibler machte.
-Während der Implementierung diese Umlaufeditors musste auch teilweise das bestehende Datenmodell angepasst werden, um die neuen Anforderungen zu erfüllen. 
-Da die Datenbank mit Daten aus anderen Systemen gefüllt wird, musste auch ein anderes, bestehendes Projekt, das für den Import und Export von Daten benutzt ist, angepasst werden.
+Während der Implementierung dieses Umlaufeditors musste auch teilweise das bestehende Datenmodell angepasst werden, um die neuen Anforderungen zu erfüllen. 
+Da die Datenbank mit Daten aus anderen Systemen gefüllt wird, musste auch ein anderes, bestehendes Projekt, das für den Import und Export von Daten benutzt wird, angepasst werden.
 Dabei musste darauf geachtet werden, dass die Daten weiterhin mit dem \emph{VDV-452}-Standard kompatibel bleiben, um die Interoperabilität mit anderen Systemen zu gewährleisten.
+
+\chapter{Abstract}
+    This internship report describes the work of the intern during their internship at the company ITPRO. The focus was on the development
+    of software for the ITCS management system, which is used in public transportation infrastructure. The core of this software is a web application
+    that allows the creation of circulations from individual trips. In the process, various required data had to be generated in the underlying database.
+    Additionally, these circulations were to be automatically checked for feasibility.
+    In this internship, the programming language \emph{C\#} and the \emph{.NET} framework were used. Database access was handled via the \emph{Entity Framework Core} library,
+    which provides an object-oriented abstraction layer for database access. The frontend was developed using \emph{Blazor}, a modern web technology
+    that enables the creation of interactive web applications with C\#. By using \emph{Blazor}, seamless integration between frontend and backend could be achieved,
+    making development more efficient and flexible.
+    During the implementation of this circulation editor, the existing data model also had to be partially adapted to meet the new requirements.
+    Since the database is populated with data from other systems, another existing project used for importing and exporting data also had to be adjusted.
+    Care had to be taken to ensure that the data remained compatible with the \emph{VDV-452} standard in order to guarantee interoperability with other systems.

@@ -1,20 +1,20 @@
 \chapter{Implementierung}\label{ch:Implementierung}
 \section{Implementierung "ITCS-Management"}\label{sec:ImplementierungITCS-Management}
-    Die Benutzeroberflächen der \emph{ITCS-Management}-Anwendung wurden wie bereits erwähnnt mit Blazor implementiert. Dabei werden pro Seite 
+    Die Benutzeroberflächen der \emph{ITCS-Management}-Anwendung wurden, wie bereits erwähnnt, mit Blazor implementiert. Dabei werden pro Seite 
     zwei Dateien angelegt. Eine \texttt{.razor}-Datei, die das Layout der Seite über eine XML-ähnliche Syntax definiert
     und eine \texttt{razor.cs}-Datei, die als \texttt{partial} markiert werden muss und alle benötigten Methoden und Logik hinter der Seite enthält. Manchmal ist die Verwendung einer \texttt{razor.css}-Datei 
-    auch sinnvoll, um die Seite zu stylen. Die Logic und die Css-klassen könnten zwar auch inder der \texttt{.razor}-Datei definiert werden,
+    auch sinnvoll, um die Seite zu stylen. Die Logik und die Css-klassen könnten zwar auch in der der \texttt{.razor}-Datei definiert werden,
     aber das würde die Übersichtlichkeit stark verringern. 
     
     Der Datenbankzugriff erfolgt über mehrere Schichten. \emph{Repositories} sind dafür zuständig, 
     die Daten aus der Datenbank zu laden und zu speichern. Sie führen normalerweise nur grundlegende Interaktionen mit der Datenbank über den Datenbank-Kontext des \gls{efc} aus.
     Diese \emph{Repositories} werden dann von den \emph{Services} verwendet, die die Logik der Anwendung enthalten. Ein großer 
     Vorteil der Verwendung von Blazor im Vergleich zu anderen Frontend-Technologien wie Angular oder React ist, dass die gesamte Logik der Anwendung in
-    C\# geschrieben werden kann. Dadurch werden sind keine HTTP-Endpoints benötigt da auf die Daten des Teilprojekts für den Datenbankzugriff direkt zugegriffen werden kann.
+    C\# geschrieben werden kann. Dadurch werden keine HTTP-Endpoints benötigt, da auf die Daten des Teilprojekts für den Datenbankzugriff direkt zugegriffen werden kann.
     Die Services und Repositories wurden dann in der \texttt{Program.cs}-Datei der Anwendung für die Dependency-Injection registriert,
     damit sie in den Blazor-Komponenten verwendet werden können.
 
-    Für die Darstellung der Daten im Frontend wurde auf UI-Komponentenbibliothek \emph{Radzen Blazor}~\cite{radzen} zurückgegriffen. 
+    Für die Darstellung der Daten im Frontend wurde auf die UI-Komponentenbibliothek \emph{Radzen Blazor}~\cite{radzen} zurückgegriffen. 
     Diese Bibliothek bietet eine Vielzahl an vorgefertigten Komponenten, die das Erstellen von Benutzeroberflächen erleichtern.
     
     \begin{program} [H]
@@ -80,8 +80,8 @@ foreach (RideViewItem cRide in sortedRides)
 }\end{CsCode} \end{program}
 
     In Programm~\ref{prog:RideGeneration} ist ein Ausschnitt der Methode zu sehen, die für die Ermittlung der zu generierenden Fahrten zuständig ist. Um genauer zu sein,
-    handelt es sich um den Teil der die zu generierenden Leerfahrten und Pausen ermittelt. Zunächst werden dafür allen Fahrten in dem Umlauf nach ihrer Startzeit sortiert.
-    Anschließend wird in einer Schleife über alle sortierten Fahrten iteriert wobei jede Fahrt gemeinsam mit der vorherigen betrachtet wird. Sind der Zielpunkt der vorherigen Fahrt
+    handelt es sich um den Teil, der die zu generierenden Leerfahrten und Pausen ermittelt. Zunächst werden dafür allen Fahrten in dem Umlauf nach ihrer Startzeit sortiert.
+    Anschließend wird in einer Schleife über alle sortierten Fahrten iteriert, wobei jede Fahrt gemeinsam mit der vorherigen betrachtet wird. Sind der Zielpunkt der vorherigen Fahrt
     und der Startpunkt der aktuellen Fahrt nicht gleich, wird eine Leerfahrt benötigt. Um unnötige Generierungen zu vermeiden, wird zunächst geprüft, ob eine Leerfahrt bereits existiert.
     Sollte dies der Fall sein, wird diese Fahrt in die Liste der benötigten Fahrten aufgenommen und die Startzeit der Leerfahrt aktualisiert, falls sie sich geändert hat.
     Sind der Zielpunkt der vorherigen Fahrt und der Startpunkt der aktuellen Fahrt gleich, wird geprüft, ob eine Pause generiert werden soll. Solche Sonderfahrten werden nur generiert, wenn
@@ -95,9 +95,12 @@ foreach (RideViewItem cRide in sortedRides)
     Die Transaktionsverwaltung wurde aber für jede Methode selbst implementiert, da der Datenbank-Manager nicht für alle Operationen geeignet ist. Oftmals 
     wurden Operationen direkt als SQL-Statements ausgeführt. 
     Die Methoden von \texttt{EntityGenerator} sollten als Bibliothek in anderen Projekten verwendet werden können.
+    Eine dieser Methoden ist die \texttt{GenerateCourseNr}-Methode, die eine Kursnummer für eine Fahrt generiert. 
+    Kursnummern sind in der Regel eine Kombination aus einer Routen-Nummer als Präfix und einer fortlaufenden Nummer, deren Kombination über Versionen hinweg eindeutig sein muss,
+    ohne Teil des Primärschlüssels zu sein.
     \begin{program} [H]
-        \caption{Ermittlung der zu generierenden Fahrten}
-        \label{prog:RideGeneration}
+        \caption{Ermittlung einer Kursnummer}
+        \label{prog:CourseNumberGeneration}
     \begin{CsCode}[numbers=left]
 public virtual int GenerateCourseNr(string ccid, int routeNr)
 {
@@ -112,7 +115,6 @@ public virtual int GenerateCourseNr(string ccid, int routeNr)
             $"Keine Konfiguration für '{ccid}' gefunden.", nameof(ccid));
 
     int courseNoLength = config.CourseNoLength > 0 ? config.CourseNoLength : 3;
-
     int maxCourseValue = 899;
     if (courseNoLength > 0)
         maxCourseValue = (int)Math.Pow(10, courseNoLength) - 101;
@@ -137,7 +139,7 @@ public virtual int GenerateCourseNr(string ccid, int routeNr)
             foreach (Ride ride in rides)
                 if (ride.CourseNr > highestCourseNr && 
                     ride.CourseNr % currentPrefix <= maxCourseValue)
-                    internalHighestCourseNr = ride.CourseNr;
+                        internalHighestCourseNr = ride.CourseNr;
         }
         if (internalHighestCourseNr % currentPrefix < maxCourseValue)
         {
@@ -153,3 +155,12 @@ public virtual int GenerateCourseNr(string ccid, int routeNr)
     return (currentPrefix * (int)Math.Pow(10, courseNoLength)) + 
         ((highestCourseNr + 1) % currentPrefix);
 }\end{CsCode} \end{program}
+    In Programm~\ref{prog:CourseNumberGeneration} ist die Implementierung der \texttt{GenerateCourseNr}-Methode zu sehen. Zunächst wird geprüft, ob die übergebene ID des
+    Kontrollzentrums leer ist.
+    Die Konfiguration des Kontrollzentrums muss geladen werden, um die Länge des fortlaufenden Teils der Kursnummer zu ermitteln.
+    Danach werden alle aktuellen und zukünftigen Versionen des Kontrollzentrums geladen da die Kursnummer eindeutig sein sollte, ohne vergangene Versionen zu berücksichtigen.
+    Anschließend wird in einer Schleife versucht, eine gültige Kursnummer zu finden, indem die höchste Kursnummer für jede Version ermittelt wird. Sollte 
+    keine gültige Kursnummer für die angegebene Routen-Nummer gefunden werden, wird der Präfix der Kursnummer um eins verringert und erneut geprüft. Dabei muss sichergestellt werden, dass 
+    die letzten 101 Kursnummern pro Präfix nicht verwendet werden, da diese für Sonderfälle reserviert sind.
+    Sollte keine gültige Kursnummer gefunden werden,
+    wird eine Ausnahme ausgelöst. Andernfalls wird die Kursnummer zurückgegeben.
